@@ -1,0 +1,14 @@
+# Dados de análise — não versionar
+*.csv
+*.xlsx
+*.json
+# Exceto .gitignore
+!.gitignore
+
+# HTML de análise
+importar listas.html
+Driver.html
+
+# Ambiente
+.env
+node_modules/
