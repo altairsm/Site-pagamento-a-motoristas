@@ -1,0 +1,2132 @@
+{
+  "name": "Fechamento Motoristas Jad",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "relatorio-motorista",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        128
+      ],
+      "id": "deff1886-8d76-4563-8b49-3f9effbd9ddd",
+      "name": "Webhook",
+      "webhookId": "78c0ebb3-28bf-4ad8-9e4c-a52c1ef9ecdb"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{$json.html}}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2448,
+        128
+      ],
+      "id": "7fd1dbfd-b388-4b4e-8f77-acf3e69a3d9e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Dados",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        -480
+      ],
+      "id": "602c21f2-1761-41b6-b1ab-9d9fa51d32b4",
+      "name": "Webhook1",
+      "webhookId": "c11eef82-d802-4cb3-b0c4-d2650c51f3e5"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "matriculos_jad",
+          "mode": "list",
+          "cachedResultName": "matriculos_jad"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "OperadorMatricula",
+              "value": "={{ $json.body.matricula }}"
+            },
+            {
+              "column": "cpf",
+              "value": "={{ $json.body.cpf }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        -480
+      ],
+      "id": "655f6e24-60dd-4608-a82f-9367e76d6ef6",
+      "name": "motorista",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "acareacaojad",
+          "mode": "list",
+          "cachedResultName": "acareacaojad"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        -672
+      ],
+      "id": "5ba09be2-8a6f-4086-8f82-dfb627ab99f7",
+      "name": "reclamacoes",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "relatorioentrega_export",
+          "mode": "list",
+          "cachedResultName": "relatorioentrega_export"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "OperadorMatricula",
+              "value": "={{ $json.body.matricula }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        -864
+      ],
+      "id": "8de251a6-2b43-4a5b-bed2-911387414aa1",
+      "name": "entregas",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2448,
+        -528
+      ],
+      "id": "16e9e0de-5fab-442c-a1bb-5882f5159558",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tabela_frete_motorista",
+          "mode": "list",
+          "cachedResultName": "tabela_frete_motorista"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "matricula",
+              "value": "={{ $json.body.matricula }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        -288
+      ],
+      "id": "4f4d0860-8c4d-42bb-bda5-f10583f2b506",
+      "name": "tabela_frete_motorista",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "lista_entregas"
+        },
+        "returnAll": true,
+        "where": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        -96
+      ],
+      "id": "07a6297e-a354-41e8-a25d-b71c44e82f7a",
+      "name": "lista_entregas",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "SalvarViagem",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        1632
+      ],
+      "id": "f433b3d3-95b0-42a4-a4c5-bee78e25545b",
+      "name": "SalvarViagem",
+      "webhookId": "c11eef82-d802-4cb3-b0c4-d2650c51f3e5"
+    },
+    {
+      "parameters": {
+        "path": "gestao_viagens",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        352
+      ],
+      "id": "796fe148-33cd-4297-9d27-de0342e5899b",
+      "name": "Webhook5",
+      "webhookId": "78c0ebb3-28bf-4ad8-9e4c-a52c1ef9ecdb"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{$json.html}}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2448,
+        352
+      ],
+      "id": "179f482a-cb9e-4401-b0a0-1b93f6647535",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Gestão de Viagens — INTUITIVA LOG</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap\" rel=\"stylesheet\">\n    <style>\n        :root {\n            --bg:       #0d0f14;\n            --surface:  #161920;\n            --surface2: #1e2230;\n            --border:   #2a2f3e;\n            --accent:   #f0c040;\n            --accent2:  #3de8a0;\n            --danger:   #ff5a5a;\n            --warn:     #ff9f40;\n            --info:     #5ab4ff;\n            --text:     #e8eaf0;\n            --muted:    #6b7280;\n\n            --font-display: 'Bebas Neue', sans-serif;\n            --font-mono:    'IBM Plex Mono', monospace;\n            --font-body:    'IBM Plex Sans', sans-serif;\n        }\n\n        * { margin: 0; padding: 0; box-sizing: border-box; }\n\n        body {\n            background: var(--bg);\n            color: var(--text);\n            font-family: var(--font-body);\n            min-height: 100vh;\n            line-height: 1.5;\n        }\n\n        body::before {\n            content: '';\n            position: fixed; inset: 0;\n            background-image:\n                linear-gradient(rgba(240,192,64,.03) 1px, transparent 1px),\n                linear-gradient(90deg, rgba(240,192,64,.03) 1px, transparent 1px);\n            background-size: 40px 40px;\n            pointer-events: none;\n            z-index: 0;\n        }\n\n        /* TOPBAR */\n        .topbar {\n            background: var(--surface);\n            border-bottom: 1px solid var(--border);\n            padding: 0 32px;\n            height: 60px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            position: sticky; top: 0; z-index: 50;\n        }\n\n        .topbar-brand {\n            font-family: var(--font-display);\n            font-size: 1.5rem;\n            letter-spacing: 3px;\n            color: var(--accent);\n        }\n\n        .topbar-title {\n            font-family: var(--font-mono);\n            font-size: .7rem;\n            letter-spacing: 2px;\n            color: var(--muted);\n            text-transform: uppercase;\n        }\n\n        .topbar-right {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n        }\n\n        .portal-link {\n            font-family: var(--font-mono);\n            font-size: .62rem;\n            color: var(--muted);\n            letter-spacing: 1px;\n            text-decoration: none;\n            border: 1px solid var(--border);\n            padding: 6px 12px;\n            transition: color .15s, border-color .15s;\n        }\n\n        .portal-link:hover {\n            color: var(--accent);\n            border-color: var(--accent);\n        }\n\n        /* LAYOUT */\n        .page {\n            position: relative; z-index: 1;\n            max-width: 1400px;\n            margin: 0 auto;\n            padding: 32px;\n        }\n\n        /* FORMULÁRIO */\n        .form-panel {\n            background: var(--surface);\n            border: 1px solid var(--border);\n            border-top: 3px solid var(--accent);\n            padding: 28px 32px;\n            margin-bottom: 40px;\n            position: relative;\n            border-radius: 4px;\n        }\n\n        .form-panel::before {\n            content: '';\n            position: absolute;\n            top: -1px; left: 60px; right: 60px;\n            height: 3px;\n            background: var(--accent);\n            filter: blur(8px);\n            opacity: .5;\n        }\n\n        .form-header {\n            display: flex;\n            align-items: baseline;\n            gap: 16px;\n            margin-bottom: 28px;\n        }\n\n        .form-title {\n            font-family: var(--font-display);\n            font-size: 1.8rem;\n            letter-spacing: 3px;\n            color: var(--accent);\n        }\n\n        .form-sub {\n            font-family: var(--font-mono);\n            font-size: .65rem;\n            color: var(--muted);\n            letter-spacing: 2px;\n            text-transform: uppercase;\n        }\n\n        .form-grid {\n            display: grid;\n            grid-template-columns: 160px 200px 1fr auto;\n            gap: 16px;\n            align-items: end;\n        }\n\n        @media (max-width: 900px) {\n            .form-grid { grid-template-columns: 1fr 1fr; }\n            .form-grid .btn-submit { grid-column: 1 / -1; }\n        }\n\n        .field {\n            display: flex;\n            flex-direction: column;\n            gap: 6px;\n        }\n\n        .field label {\n            font-family: var(--font-mono);\n            font-size: .6rem;\n            letter-spacing: 2px;\n            text-transform: uppercase;\n            color: var(--muted);\n        }\n\n        .field input,\n        .field select {\n            background: var(--bg);\n            border: 1px solid var(--border);\n            color: var(--text);\n            font-family: var(--font-mono);\n            font-size: .85rem;\n            padding: 10px 14px;\n            outline: none;\n            transition: border-color .2s, box-shadow .2s;\n            width: 100%;\n            border-radius: 3px;\n        }\n\n        .field input:focus,\n        .field select:focus {\n            border-color: var(--accent);\n            box-shadow: 0 0 0 3px rgba(240, 192, 64, .15);\n        }\n\n        .field select {\n            background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E\");\n            background-repeat: no-repeat;\n            background-position: right 12px center;\n            padding-right: 36px;\n            cursor: pointer;\n            appearance: none;\n        }\n\n        .btn-submit {\n            background: var(--accent);\n            color: #0d0f14;\n            border: none;\n            font-family: var(--font-display);\n            font-size: 1.1rem;\n            letter-spacing: 3px;\n            padding: 11px 32px;\n            cursor: pointer;\n            transition: all .2s;\n            white-space: nowrap;\n            height: 42px;\n            border-radius: 3px;\n        }\n\n        .btn-submit:hover { opacity: .9; transform: translateY(-1px); }\n        .btn-submit:active { transform: scale(.97); }\n        .btn-submit:disabled { opacity: .4; cursor: not-allowed; }\n\n        .form-feedback {\n            margin-top: 14px;\n            font-family: var(--font-mono);\n            font-size: .72rem;\n            padding: 10px 14px;\n            display: none;\n            border-left: 3px solid transparent;\n            border-radius: 3px;\n        }\n\n        .form-feedback.success { background: rgba(61,232,160,.1); color: var(--accent2); border-left-color: var(--accent2); }\n        .form-feedback.error   { background: rgba(255,90,90,.1);   color: var(--danger);  border-left-color: var(--danger); }\n\n        /* SEÇÃO VIAGENS */\n        .section-header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            margin-bottom: 20px;\n            flex-wrap: wrap;\n            gap: 12px;\n        }\n\n        .section-title {\n            font-family: var(--font-display);\n            font-size: 1.4rem;\n            letter-spacing: 3px;\n            color: var(--text);\n            display: flex;\n            align-items: center;\n            gap: 10px;\n        }\n\n        .count-badge {\n            font-family: var(--font-mono);\n            font-size: .65rem;\n            padding: 3px 10px;\n            letter-spacing: 1px;\n            border: 1px solid;\n        }\n\n        .count-badge { background: rgba(255,90,90,.15); color: var(--danger); border-color: rgba(255,90,90,.3); }\n        .count-badge.ok { background: rgba(61,232,160,.1); color: var(--accent2); border-color: rgba(61,232,160,.2); }\n\n        .filters {\n            display: flex;\n            gap: 8px;\n            flex-wrap: wrap;\n        }\n\n        .filter-btn {\n            background: transparent;\n            border: 1px solid var(--border);\n            color: var(--muted);\n            font-family: var(--font-mono);\n            font-size: .62rem;\n            letter-spacing: 1px;\n            padding: 6px 14px;\n            cursor: pointer;\n            text-transform: uppercase;\n            transition: all .15s;\n            border-radius: 3px;\n        }\n\n        .filter-btn:hover,\n        .filter-btn.active {\n            border-color: var(--accent);\n            color: var(--accent);\n        }\n\n        /* CARDS */\n        .viagens-grid {\n            display: grid;\n            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n            gap: 16px;\n        }\n\n        .viagem-card {\n            background: var(--surface);\n            border: 1px solid var(--border);\n            padding: 20px;\n            position: relative;\n            transition: border-color .2s, transform .2s, box-shadow .2s;\n            animation: cardIn .3s ease both;\n            border-radius: 4px;\n        }\n\n        @keyframes cardIn {\n            from { opacity: 0; transform: translateY(8px); }\n            to   { opacity: 1; transform: translateY(0); }\n        }\n\n        .viagem-card:hover {\n            transform: translateY(-4px);\n            box-shadow: 0 10px 25px rgba(0,0,0,.25);\n            border-color: var(--accent);\n        }\n\n        .viagem-card.pendente {\n            border-color: rgba(255,159,40,.5);\n            background: linear-gradient(135deg, var(--surface) 0%, rgba(255,159,40,.05) 100%);\n        }\n\n        .viagem-card.pendente::before {\n            content: '⚠ REVISAR';\n            position: absolute;\n            top: -1px; right: 16px;\n            background: var(--warn);\n            color: #0d0f14;\n            font-family: var(--font-mono);\n            font-size: .55rem;\n            font-weight: 600;\n            letter-spacing: 2px;\n            padding: 3px 10px;\n            border-radius: 0 0 3px 3px;\n        }\n\n        .viagem-card.revisada {\n            border-color: rgba(61,232,160,.3);\n        }\n\n        .viagem-card.revisada::before {\n            content: '✓ REVISADA';\n            position: absolute;\n            top: -1px; right: 16px;\n            background: rgba(61,232,160,.15);\n            color: var(--accent2);\n            font-family: var(--font-mono);\n            font-size: .55rem;\n            letter-spacing: 2px;\n            padding: 3px 10px;\n            border: 1px solid rgba(61,232,160,.3);\n            border-top: none;\n            border-radius: 0 0 3px 3px;\n        }\n\n        .card-top {\n            display: flex;\n            justify-content: space-between;\n            align-items: flex-start;\n            margin-bottom: 14px;\n        }\n\n        .card-numero {\n            font-family: var(--font-display);\n            font-size: 2rem;\n            letter-spacing: 2px;\n            color: var(--accent);\n            line-height: 1;\n        }\n\n        .card-status {\n            font-family: var(--font-mono);\n            font-size: .6rem;\n            letter-spacing: 1px;\n            text-transform: uppercase;\n            padding: 4px 10px;\n            border-radius: 2px;\n        }\n\n        .status-finalizado { background: rgba(61,232,160,.12); color: var(--accent2); }\n        .status-andamento  { background: rgba(90,180,255,.12); color: var(--info); }\n        .status-pendente   { background: rgba(255,159,40,.12); color: var(--warn); }\n\n        .card-motorista {\n            font-family: var(--font-mono);\n            font-size: .7rem;\n            color: var(--text);\n            margin-bottom: 4px;\n            font-weight: 600;\n        }\n\n        .card-rota {\n            font-family: var(--font-mono);\n            font-size: .62rem;\n            color: var(--muted);\n            text-transform: uppercase;\n            letter-spacing: 1px;\n            margin-bottom: 14px;\n        }\n\n        .card-stats {\n            display: grid;\n            grid-template-columns: repeat(3, 1fr);\n            gap: 8px;\n            padding: 12px 0;\n            border-top: 1px solid var(--border);\n            border-bottom: 1px solid var(--border);\n            margin-bottom: 14px;\n        }\n\n        .card-stat {\n            text-align: center;\n        }\n\n        .card-stat-val {\n            font-family: var(--font-display);\n            font-size: 1.2rem;\n            color: var(--text);\n            line-height: 1;\n        }\n\n        .card-stat-lbl {\n            font-family: var(--font-mono);\n            font-size: .52rem;\n            color: var(--muted);\n            letter-spacing: 1px;\n            text-transform: uppercase;\n        }\n\n        .card-dates {\n            display: flex;\n            justify-content: space-between;\n            margin-bottom: 14px;\n        }\n\n        .card-date-item {\n            display: flex;\n            flex-direction: column;\n            gap: 2px;\n        }\n\n        .card-date-lbl {\n            font-family: var(--font-mono);\n            font-size: .55rem;\n            color: var(--muted);\n            letter-spacing: 1px;\n            text-transform: uppercase;\n        }\n\n        .card-date-val {\n            font-family: var(--font-mono);\n            font-size: .72rem;\n            color: var(--text);\n        }\n\n        .card-metrica {\n            font-family: var(--font-mono);\n            font-size: .6rem;\n            padding: 4px 10px;\n            background: rgba(240,192,64,.08);\n            color: var(--accent);\n            border: 1px solid rgba(240,192,64,.2);\n            display: inline-block;\n            margin-bottom: 14px;\n            letter-spacing: 1px;\n            text-transform: uppercase;\n            border-radius: 2px;\n        }\n\n        .card-metrica.vazio {\n            background: rgba(107,114,128,.08);\n            color: var(--muted);\n            border-color: var(--border);\n        }\n\n        .card-actions {\n            display: flex;\n            gap: 8px;\n        }\n\n        .btn-revisar {\n            flex: 1;\n            background: var(--warn);\n            color: #0d0f14;\n            border: none;\n            font-family: var(--font-display);\n            font-size: .9rem;\n            letter-spacing: 2px;\n            padding: 8px 0;\n            cursor: pointer;\n            transition: opacity .15s;\n            border-radius: 3px;\n        }\n\n        .btn-revisar:hover { opacity: .85; }\n        .btn-revisar.confirmar {\n            background: var(--accent2);\n        }\n\n        .btn-detalhe {\n            background: transparent;\n            border: 1px solid var(--border);\n            color: var(--muted);\n            font-family: var(--font-mono);\n            font-size: .6rem;\n            letter-spacing: 1px;\n            padding: 8px 14px;\n            cursor: pointer;\n            transition: all .15s;\n            text-transform: uppercase;\n            border-radius: 3px;\n        }\n\n        .btn-detalhe:hover { border-color: var(--accent); color: var(--accent); }\n\n        /* MODAL */\n        .modal-overlay {\n            position: fixed; inset: 0;\n            background: rgba(13,15,20,.85);\n            backdrop-filter: blur(4px);\n            z-index: 200;\n            display: none;\n            align-items: center;\n            justify-content: center;\n            padding: 20px;\n        }\n\n        .modal-overlay.open { display: flex; }\n\n        .modal {\n            background: var(--surface);\n            border: 1px solid var(--border);\n            border-top: 3px solid var(--warn);\n            width: 100%;\n            max-width: 560px;\n            padding: 32px;\n            position: relative;\n            animation: modalIn .2s ease;\n            border-radius: 4px;\n        }\n\n        @keyframes modalIn {\n            from { opacity: 0; transform: scale(.96) translateY(-8px); }\n            to   { opacity: 1; transform: scale(1) translateY(0); }\n        }\n\n        .modal-title {\n            font-family: var(--font-display);\n            font-size: 1.6rem;\n            letter-spacing: 3px;\n            color: var(--warn);\n            margin-bottom: 6px;\n        }\n\n        .modal-sub {\n            font-family: var(--font-mono);\n            font-size: .65rem;\n            color: var(--muted);\n            letter-spacing: 1px;\n            margin-bottom: 24px;\n        }\n\n        .modal-fields {\n            display: flex;\n            flex-direction: column;\n            gap: 14px;\n            margin-bottom: 24px;\n        }\n\n        .modal-field-row {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 14px;\n        }\n\n        .modal-info {\n            background: var(--bg);\n            border: 1px solid var(--border);\n            padding: 10px 14px;\n            font-family: var(--font-mono);\n            font-size: .72rem;\n            color: var(--text);\n            border-radius: 3px;\n        }\n\n        .modal-info-lbl {\n            font-size: .55rem;\n            color: var(--muted);\n            letter-spacing: 2px;\n            text-transform: uppercase;\n            margin-bottom: 3px;\n        }\n\n        .modal-actions {\n            display: flex;\n            gap: 12px;\n        }\n\n        .btn-confirmar {\n            flex: 1;\n            background: var(--accent2);\n            color: #0d0f14;\n            border: none;\n            font-family: var(--font-display);\n            font-size: 1.1rem;\n            letter-spacing: 3px;\n            padding: 12px;\n            cursor: pointer;\n            transition: opacity .15s;\n            border-radius: 3px;\n        }\n\n        .btn-confirmar:hover { opacity: .85; }\n        .btn-confirmar:disabled { opacity: .4; cursor: not-allowed; }\n\n        .btn-cancelar {\n            background: transparent;\n            border: 1px solid var(--border);\n            color: var(--muted);\n            font-family: var(--font-mono);\n            font-size: .65rem;\n            letter-spacing: 1px;\n            padding: 12px 20px;\n            cursor: pointer;\n            transition: all .15s;\n            text-transform: uppercase;\n            border-radius: 3px;\n        }\n\n        .btn-cancelar:hover { border-color: var(--danger); color: var(--danger); }\n\n        /* LOADING / EMPTY */\n        .loading-state {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n            padding: 60px 0;\n            font-family: var(--font-mono);\n            color: var(--muted);\n            font-size: .75rem;\n            letter-spacing: 2px;\n        }\n\n        .spinner {\n            width: 18px; height: 18px;\n            border: 2px solid var(--border);\n            border-top-color: var(--accent);\n            border-radius: 50%;\n            animation: spin .7s linear infinite;\n            flex-shrink: 0;\n        }\n\n        @keyframes spin { to { transform: rotate(360deg); } }\n\n        .empty-state {\n            text-align: center;\n            padding: 60px 0;\n            font-family: var(--font-mono);\n            font-size: .75rem;\n            color: var(--muted);\n            letter-spacing: 1px;\n        }\n\n        /* TOAST */\n        .toast {\n            position: fixed;\n            bottom: 28px; right: 28px;\n            background: var(--surface);\n            border: 1px solid var(--border);\n            border-left: 3px solid var(--accent2);\n            padding: 14px 20px;\n            font-family: var(--font-mono);\n            font-size: .72rem;\n            color: var(--text);\n            z-index: 300;\n            transform: translateY(80px);\n            opacity: 0;\n            transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s;\n            max-width: 340px;\n            border-radius: 4px;\n        }\n\n        .toast.show { transform: translateY(0); opacity: 1; }\n        .toast.error { border-left-color: var(--danger); }\n\n        /* DIVIDER */\n        .divider {\n            display: flex;\n            align-items: center;\n            gap: 16px;\n            margin: 8px 0 32px;\n        }\n\n        .divider-line { flex: 1; height: 1px; background: var(--border); }\n        .divider-label {\n            font-family: var(--font-mono);\n            font-size: .6rem;\n            color: var(--muted);\n            letter-spacing: 2px;\n            text-transform: uppercase;\n            white-space: nowrap;\n        }\n    </style>\n</head>\n<body>\n\n<header class=\"topbar\">\n    <div class=\"topbar-brand\">INTUITIVA LOG</div>\n    <div class=\"topbar-title\">Gestão de Viagens</div>\n    <div class=\"topbar-right\">\n        <span id=\"tb-status\" style=\"font-family:var(--font-mono);font-size:.62rem;color:var(--muted);letter-spacing:1px;\"></span>\n        <a href=\"https://webhook.sactudo.com.br/webhook/relatorio-motorista\" \n           class=\"portal-link\" target=\"_blank\" rel=\"noopener\">← PORTAL MOTORISTA</a>\n    </div>\n</header>\n\n<main class=\"page\">\n\n    <!-- FORMULÁRIO NOVA VIAGEM -->\n    <section class=\"form-panel\" aria-labelledby=\"form-title\">\n        <div class=\"form-header\">\n            <h1 class=\"form-title\" id=\"form-title\">NOVA VIAGEM</h1>\n            <div class=\"form-sub\">Cadastrar lista na tabela lista_entregas</div>\n        </div>\n\n        <div class=\"form-grid\">\n            <div class=\"field\">\n                <label for=\"inp-numero\">Número da Lista</label>\n                <input type=\"number\" id=\"inp-numero\" placeholder=\"Ex: 1042\" min=\"1\" required>\n            </div>\n\n            <div class=\"field\">\n                <label for=\"inp-emissao\">Data de Emissão</label>\n                <input type=\"date\" id=\"inp-emissao\" required>\n            </div>\n\n            <div class=\"field\">\n                <label for=\"inp-motorista\">Motorista</label>\n                <select id=\"inp-motorista\" required>\n                    <option value=\"\">— Selecione o motorista —</option>\n                </select>\n            </div>\n\n            <button type=\"button\" class=\"btn-submit\" id=\"btn-cadastrar\">CADASTRAR</button>\n        </div>\n\n        <div class=\"form-feedback\" id=\"form-feedback\" role=\"alert\"></div>\n    </section>\n\n    <div class=\"divider\">\n        <div class=\"divider-line\"></div>\n        <div class=\"divider-label\">Viagens cadastradas</div>\n        <div class=\"divider-line\"></div>\n    </div>\n\n    <section aria-labelledby=\"viagens-title\">\n        <div class=\"section-header\">\n            <h2 class=\"section-title\" id=\"viagens-title\">\n                VIAGENS\n                <span class=\"count-badge\" id=\"badge-pendentes\" style=\"display:none;\" aria-live=\"polite\"></span>\n            </h2>\n            <div class=\"filters\" role=\"tablist\">\n                <button class=\"filter-btn active\" data-filter=\"todas\" role=\"tab\">TODAS</button>\n                <button class=\"filter-btn\" data-filter=\"pendente\" role=\"tab\">⚠ REVISAR</button>\n                <button class=\"filter-btn\" data-filter=\"revisada\" role=\"tab\">✓ REVISADAS</button>\n            </div>\n        </div>\n\n        <div id=\"viagens-container\">\n            <div class=\"loading-state\">\n                <div class=\"spinner\"></div>\n                CARREGANDO VIAGENS...\n            </div>\n        </div>\n    </section>\n</main>\n\n<!-- MODAL DE REVISÃO -->\n<div class=\"modal-overlay\" id=\"modal-overlay\" role=\"dialog\" aria-modal=\"true\">\n    <div class=\"modal\">\n        <div class=\"modal-title\">REVISAR VIAGEM</div>\n        <div class=\"modal-sub\" id=\"modal-sub\">Confirme os dados antes de marcar como revisada</div>\n\n        <div class=\"modal-fields\">\n            <div class=\"modal-field-row\">\n                <div class=\"modal-info\">\n                    <div class=\"modal-info-lbl\">Número</div>\n                    <div id=\"modal-numero\" style=\"font-size:1.1rem;color:var(--accent);font-family:var(--font-display);letter-spacing:2px;\">—</div>\n                </div>\n                <div class=\"modal-info\">\n                    <div class=\"modal-info-lbl\">Status</div>\n                    <div id=\"modal-status\">—</div>\n                </div>\n            </div>\n            <div class=\"modal-field-row\">\n                <div class=\"modal-info\">\n                    <div class=\"modal-info-lbl\">Data Emissão</div>\n                    <div id=\"modal-emissao\">—</div>\n                </div>\n                <div class=\"modal-info\">\n                    <div class=\"modal-info-lbl\">Data Baixa</div>\n                    <div id=\"modal-baixa\">—</div>\n                </div>\n            </div>\n            <div class=\"modal-info\">\n                <div class=\"modal-info-lbl\">Qtd CTes</div>\n                <div id=\"modal-qtd\" style=\"font-size:1.1rem;color:var(--accent2);font-family:var(--font-display);\">—</div>\n            </div>\n\n            <div class=\"field\">\n                <label for=\"modal-sel-motorista\">Motorista</label>\n                <select id=\"modal-sel-motorista\">\n                    <option value=\"\">— Selecione o motorista —</option>\n                </select>\n            </div>\n\n            <div class=\"field\">\n                <label for=\"modal-sel-metrica\">Métrica de Pagamento</label>\n                <select id=\"modal-sel-metrica\">\n                    <option value=\"\">— Selecione a métrica —</option>\n                    <option value=\"Por Entrega\">Por Entrega</option>\n                    <option value=\"Volumoso\">Volumoso</option>\n                   <option value=\"Aplha\">Aplha</option>\n                    <option value=\"Funcionário\">Funcionário</option>\n                    <option value=\"Diária\">Diária</option>\n                    <option value=\"Diária 40pc\">Diária 40pc</option>\n                    <option value=\"Diária 30pc\">Diária 30pc</option>\n                </select>\n            </div>\n\n            <div class=\"field\">\n                <label for=\"modal-obs\">Observação (opcional)</label>\n                <input type=\"text\" id=\"modal-obs\" placeholder=\"Alguma nota sobre esta viagem...\">\n            </div>\n        </div>\n\n        <div class=\"modal-actions\">\n            <button type=\"button\" class=\"btn-confirmar\" id=\"btn-confirmar-revisao\">✓ CONFIRMAR REVISÃO</button>\n            <button type=\"button\" class=\"btn-cancelar\" id=\"btn-cancelar-modal\">CANCELAR</button>\n        </div>\n    </div>\n</div>\n\n<!-- TOAST -->\n<div class=\"toast\" id=\"toast\" role=\"alert\" aria-live=\"assertive\"></div>\n\n<script>\n    // CONFIGURAÇÃO\n    const WEBHOOK_VIAGENS = 'https://webhook.sactudo.com.br/webhook/Viagens';\n    const WEBHOOK_SALVAR  = 'https://webhook.sactudo.com.br/webhook/SalvarViagem';\n    const WEBHOOK_REVISAR = 'https://webhook.sactudo.com.br/webhook/RevisarViagem';\n\n    // ESTADO\n    let todosMotoristas = [];\n    let todasViagens    = [];\n    let filtroAtivo     = 'todas';\n    let viagemSelecionada = null;\n\n    // UTILITÁRIOS\n    const $ = id => document.getElementById(id);\n\n    function escapeHTML(str) {\n        if (!str) return '';\n        const div = document.createElement('div');\n        div.textContent = str;\n        return div.innerHTML;\n    }\n\n    function formatDate(d) {\n        if (!d) return '—';\n        const m = String(d).match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n        return m ? `${m[3]}/${m[2]}/${m[1]}` : String(d);\n    }\n\n    function showToast(msg, isError = false) {\n        const el = $('toast');\n        el.textContent = msg;\n        el.className = `toast${isError ? ' error' : ''}`;\n        void el.offsetWidth;\n        el.classList.add('show');\n        setTimeout(() => el.classList.remove('show'), 4000);\n    }\n\n    function setFeedback(msg, type) {\n        const el = $('form-feedback');\n        el.textContent = msg;\n        el.className = `form-feedback ${type}`;\n        el.style.display = 'block';\n        if (type === 'success') setTimeout(() => el.style.display = 'none', 4000);\n    }\n\n    function getStatusClass(status) {\n        const s = (status || '').toLowerCase();\n        if (s.includes('finaliz')) return 'status-finalizado';\n        if (s.includes('andamento') || s.includes('aberto')) return 'status-andamento';\n        return 'status-pendente';\n    }\n\n    // CARREGAR DADOS\n    async function carregarDados() {\n        const container = $('viagens-container');\n        container.innerHTML = `<div class=\"loading-state\"><div class=\"spinner\"></div>CARREGANDO VIAGENS...</div>`;\n\n        try {\n            const res = await fetch(WEBHOOK_VIAGENS, { method: 'GET' });\n            if (!res.ok) throw new Error(`HTTP ${res.status}`);\n\n            const data = await res.json();\n\n            let listaViagens = [];\n            let listaMotoristas = [];\n\n            if (Array.isArray(data)) {\n                data.forEach(item => {\n                    if (item.OperadorMatricula !== undefined && item.nome_completo !== undefined && !item['Número']) {\n                        listaMotoristas.push(item);\n                    } else if (item['Número'] !== undefined || item.status !== undefined) {\n                        listaViagens.push(item);\n                    }\n                });\n            } else {\n                listaViagens = data.viagens || data.listas || [];\n                listaMotoristas = data.motoristas || data.cadastro || [];\n            }\n\n            todosMotoristas = listaMotoristas.filter(m => m.OperadorMatricula || m.matricula);\n            todasViagens = listaViagens;\n\n            // Popular select de motoristas\n            const sel = $('inp-motorista');\n            sel.innerHTML = '<option value=\"\">— Selecione o motorista —</option>';\n            todosMotoristas\n                .sort((a, b) => (a.nome_completo || '').localeCompare(b.nome_completo || ''))\n                .forEach(m => {\n                    const mat = m.OperadorMatricula || m.matricula;\n                    const nome = (m.nome_completo || m.OperadorNome || String(mat)).toUpperCase();\n                    const opt = new Option(`${mat} — ${nome}`, mat);\n                    sel.add(opt);\n                });\n\n            $('tb-status').textContent = `${todosMotoristas.length} MOTORISTAS · ${listaViagens.length} VIAGENS`;\n\n            renderViagens();\n\n        } catch (e) {\n            console.error('Erro ao carregar dados:', e);\n            $('viagens-container').innerHTML = `<div class=\"empty-state\">Erro ao carregar dados: ${escapeHTML(e.message)}<br>Verifique o webhook.</div>`;\n            showToast('Erro ao carregar dados', true);\n        }\n    }\n\n    // RENDER VIAGENS (com escapeHTML para segurança)\n    function renderViagens() {\n        const container = $('viagens-container');\n\n        let filtradas = todasViagens.filter(v => {\n            if (filtroAtivo === 'pendente') return !v.revisado;\n            if (filtroAtivo === 'revisada') return !!v.revisado;\n            return true;\n        });\n\n        filtradas.sort((a, b) => {\n            if (!a.revisado && b.revisado) return -1;\n            if (a.revisado && !b.revisado) return 1;\n            return (b['Número'] || 0) - (a['Número'] || 0);\n        });\n\n        const pendentes = todasViagens.filter(v => !v.revisado).length;\n        const badge = $('badge-pendentes');\n        if (pendentes > 0) {\n            badge.textContent = `${pendentes} PENDENTE${pendentes > 1 ? 'S' : ''}`;\n            badge.className = 'count-badge';\n        } else {\n            badge.textContent = 'TUDO REVISADO';\n            badge.className = 'count-badge ok';\n        }\n        badge.style.display = 'inline-block';\n\n        if (!filtradas.length) {\n            container.innerHTML = '<div class=\"empty-state\">Nenhuma viagem encontrada.</div>';\n            return;\n        }\n\n        let html = '<div class=\"viagens-grid\">';\n        filtradas.forEach((v, idx) => {\n            const numero = v['Número'] || v.numero || '—';\n            const status = v.status || '—';\n            const rota = v.Rota || v.rota || '—';\n            const qtd = v.Qtd || v.qtd || 0;\n            const peso = parseFloat(v.Peso || v.peso || 0).toFixed(0);\n            const pago = v.pago;\n            const emissao = formatDate(v['Data Emissão'] || v['Data Emissao']);\n            const baixa = formatDate(v['Data Baixa']);\n            const metrica = v.metrica_da_lista || null;\n            const tipo = v.Tipo || v.tipo || '—';\n\n            const matricula = v.matricula_motorista || v.matricula || v.OperadorMatricula || '';\n            const motoristaObj = matricula ? todosMotoristas.find(m => String(m.OperadorMatricula || m.matricula) === String(matricula)) : null;\n            const nomeMotorista = motoristaObj ? (motoristaObj.nome_completo || String(matricula)) : rota;\n\n            const isPendente = !v.revisado;\n\n            html += `\n                <div class=\"viagem-card ${isPendente ? 'pendente' : 'revisada'}\" style=\"animation-delay: ${idx * 0.04}s\">\n                    <div class=\"card-top\">\n                        <div class=\"card-numero\">#${escapeHTML(numero)}</div>\n                        <span class=\"card-status ${getStatusClass(status)}\">${escapeHTML(status)}</span>\n                    </div>\n                    <div class=\"card-motorista\">${escapeHTML(nomeMotorista.toUpperCase())}</div>\n                    <div class=\"card-rota\">${escapeHTML(tipo)} · ${escapeHTML(rota)}</div>\n                    <span class=\"card-metrica ${metrica ? '' : 'vazio'}\">${escapeHTML(metrica || 'SEM MÉTRICA')}</span>\n                    <div class=\"card-stats\">\n                        <div class=\"card-stat\"><div class=\"card-stat-val\">${qtd}</div><div class=\"card-stat-lbl\">CTes</div></div>\n                        <div class=\"card-stat\"><div class=\"card-stat-val\">${peso}kg</div><div class=\"card-stat-lbl\">Peso</div></div>\n                        <div class=\"card-stat\"><div class=\"card-stat-val\" style=\"color:${pago ? 'var(--accent2)' : 'var(--warn)'}\">${pago ? '✓' : '○'}</div><div class=\"card-stat-lbl\">Pago</div></div>\n                    </div>\n                    <div class=\"card-dates\">\n                        <div class=\"card-date-item\">\n                            <div class=\"card-date-lbl\">Emissão</div>\n                            <div class=\"card-date-val\">${escapeHTML(emissao)}</div>\n                        </div>\n                        <div class=\"card-date-item\" style=\"text-align:right;\">\n                            <div class=\"card-date-lbl\">Baixa</div>\n                            <div class=\"card-date-val\">${escapeHTML(baixa)}</div>\n                        </div>\n                    </div>\n                    <div class=\"card-actions\">\n                        ${isPendente \n                            ? `<button class=\"btn-revisar\" data-idx=\"${idx}\">⚠ REVISAR</button>` \n                            : `<button class=\"btn-revisar confirmar\" disabled>✓ REVISADA</button>`\n                        }\n                        <button class=\"btn-detalhe\" data-idx=\"${idx}\">DETALHE</button>\n                    </div>\n                </div>`;\n        });\n        html += '</div>';\n        container.innerHTML = html;\n    }\n\n    // MODAL\n    function abrirModalRevisao(viagem) {\n        viagemSelecionada = viagem;\n\n        const numero = viagem['Número'] || viagem.numero || '—';\n        const status = viagem.status || '—';\n        const emissao = formatDate(viagem['Data Emissão'] || viagem['Data Emissao']);\n        const baixa = formatDate(viagem['Data Baixa']);\n        const qtd = viagem.Qtd || viagem.qtd || 0;\n        const matricula = viagem.matricula_motorista || viagem.matricula || viagem.OperadorMatricula || '';\n\n        $('modal-numero').textContent = `#${numero}`;\n        $('modal-status').textContent = status;\n        $('modal-emissao').textContent = emissao;\n        $('modal-baixa').textContent = baixa;\n        $('modal-qtd').textContent = qtd;\n        $('modal-obs').value = viagem.obs || viagem.observacao || '';\n\n        // Motoristas no modal\n        const selMot = $('modal-sel-motorista');\n        selMot.innerHTML = '<option value=\"\">— Selecione o motorista —</option>';\n        todosMotoristas\n            .sort((a, b) => (a.nome_completo || '').localeCompare(b.nome_completo || ''))\n            .forEach(m => {\n                const mat = m.OperadorMatricula || m.matricula;\n                const nome = (m.nome_completo || String(mat)).toUpperCase();\n                const opt = new Option(`${mat} — ${nome}`, mat);\n                selMot.add(opt);\n            });\n        selMot.value = matricula || '';\n\n        $('modal-sel-metrica').value = viagem.metrica_da_lista || '';\n\n        const isPendente = !viagem.revisado;\n        $('modal-sub').textContent = isPendente ? 'Confirme os dados antes de marcar como revisada' : 'Esta viagem já foi revisada';\n        $('btn-confirmar-revisao').disabled = !isPendente;\n        $('btn-confirmar-revisao').textContent = isPendente ? '✓ CONFIRMAR REVISÃO' : '✓ JÁ REVISADA';\n\n        $('modal-overlay').classList.add('open');\n    }\n\n    function fecharModal() {\n        $('modal-overlay').classList.remove('open');\n        viagemSelecionada = null;\n    }\n\n    async function confirmarRevisao() {\n        if (!viagemSelecionada) return;\n\n        const btn = $('btn-confirmar-revisao');\n        const originalText = btn.textContent;\n        btn.disabled = true;\n        btn.textContent = 'SALVANDO...';\n\n        try {\n            const novaMatricula = $('modal-sel-motorista').value;\n            const novaMetrica = $('modal-sel-metrica').value;\n            const obs = $('modal-obs').value.trim();\n\n            const payload = {\n                action: 'revisar_viagem',\n                numero: viagemSelecionada['Número'] || viagemSelecionada.numero,\n                revisado: true,\n                matricula_motorista: novaMatricula ? parseInt(novaMatricula) : null,\n                metrica_da_lista: novaMetrica || null,\n                obs: obs\n            };\n\n            const res = await fetch(WEBHOOK_REVISAR, {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n                body: JSON.stringify(payload)\n            });\n\n            if (!res.ok) throw new Error(`HTTP ${res.status}`);\n\n            // Atualiza localmente\n            const idx = todasViagens.findIndex(v => String(v['Número'] || v.numero) === String(payload.numero));\n            if (idx !== -1) {\n                todasViagens[idx].revisado = true;\n                todasViagens[idx].obs = obs;\n                todasViagens[idx].matricula_motorista = payload.matricula_motorista;\n                todasViagens[idx].metrica_da_lista = payload.metrica_da_lista;\n            }\n\n            fecharModal();\n            renderViagens();\n            showToast(`✓ Viagem #${payload.numero} marcada como revisada!`);\n        } catch (e) {\n            showToast(`Erro ao salvar revisão: ${e.message}`, true);\n            btn.disabled = false;\n            btn.textContent = originalText;\n        }\n    }\n\n    // CADASTRAR NOVA VIAGEM\n    async function cadastrarViagem() {\n        const numero = $('inp-numero').value.trim();\n        const emissao = $('inp-emissao').value;\n        const matricula = $('inp-motorista').value;\n\n        if (!numero) return setFeedback('Informe o número da lista.', 'error');\n        if (!emissao) return setFeedback('Informe a data de emissão.', 'error');\n        if (!matricula) return setFeedback('Selecione o motorista.', 'error');\n\n        if (todasViagens.some(v => String(v['Número'] || v.numero) === String(numero))) {\n            return setFeedback(`Lista #${numero} já cadastrada.`, 'error');\n        }\n\n        const btn = $('btn-cadastrar');\n        btn.disabled = true;\n        btn.textContent = 'SALVANDO...';\n\n        try {\n            const motorista = todosMotoristas.find(m => String(m.OperadorMatricula || m.matricula) === String(matricula));\n\n            const payload = {\n                action: 'nova_viagem',\n                Número: parseInt(numero),\n                'Data Emissão': emissao,\n                matricula_motorista: parseInt(matricula),\n                Rota: motorista ? (motorista.nome_completo || motorista.OperadorNome || '') : '',\n                status: 'Aberto',\n                revisado: false,\n                pago: false,\n                Qtd: 0,\n                Peso: 0,\n                Valor: 0,\n                metrica_da_lista: null,\n                obs: null\n            };\n\n            const res = await fetch(WEBHOOK_SALVAR, {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n                body: JSON.stringify(payload)\n            });\n\n            if (!res.ok) throw new Error(`HTTP ${res.status}`);\n\n            todasViagens.unshift({ ...payload, 'Data Baixa': null });\n            renderViagens();\n\n            // Limpar formulário\n            $('inp-numero').value = '';\n            $('inp-emissao').value = '';\n            $('inp-motorista').value = '';\n\n            setFeedback(`✓ Lista #${numero} cadastrada com sucesso!`, 'success');\n            showToast(`✓ Viagem #${numero} criada!`);\n        } catch (e) {\n            setFeedback(`Erro ao cadastrar: ${e.message}`, 'error');\n        } finally {\n            btn.disabled = false;\n            btn.textContent = 'CADASTRAR';\n        }\n    }\n\n    // EVENTOS\n    $('btn-cadastrar').addEventListener('click', cadastrarViagem);\n    $('btn-confirmar-revisao').addEventListener('click', confirmarRevisao);\n    $('btn-cancelar-modal').addEventListener('click', fecharModal);\n\n    $('viagens-container').addEventListener('click', e => {\n        const btn = e.target.closest('[data-idx]');\n        if (!btn) return;\n\n        const idx = parseInt(btn.dataset.idx);\n        const filtradas = todasViagens.filter(v => {\n            if (filtroAtivo === 'pendente') return !v.revisado;\n            if (filtroAtivo === 'revisada') return !!v.revisado;\n            return true;\n        }).sort((a, b) => {\n            if (!a.revisado && b.revisado) return -1;\n            if (a.revisado && !b.revisado) return 1;\n            return (b['Número'] || 0) - (a['Número'] || 0);\n        });\n\n        if (filtradas[idx]) abrirModalRevisao(filtradas[idx]);\n    });\n\n    $('modal-overlay').addEventListener('click', e => {\n        if (e.target === $('modal-overlay')) fecharModal();\n    });\n\n    document.addEventListener('keydown', e => {\n        if (e.key === 'Escape') fecharModal();\n    });\n\n    document.querySelectorAll('.filter-btn').forEach(btn => {\n        btn.addEventListener('click', () => {\n            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));\n            btn.classList.add('active');\n            filtroAtivo = btn.dataset.filter;\n            renderViagens();\n        });\n    });\n\n    // Inicialização\n    $('inp-emissao').value = new Date().toISOString().slice(0, 10);\n\n    (async () => {\n        await carregarDados();\n    })();\n</script>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -2672,
+        352
+      ],
+      "id": "9be4c902-8595-4767-bb40-308da56be708",
+      "name": "HTML3"
+    },
+    {
+      "parameters": {
+        "path": "Viagens",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        1088
+      ],
+      "id": "d5ac24c2-8981-4dba-aaa2-8da208d2e846",
+      "name": "Webhook4",
+      "webhookId": "c11eef82-d802-4cb3-b0c4-d2650c51f3e5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2448,
+        1088
+      ],
+      "id": "08272d22-aac7-478e-8544-ca591cd91129",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2224,
+        1088
+      ],
+      "id": "b29e29f1-6486-44a5-9a1b-672561d58e32",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM lista_entregas\nWHERE \"Data Emissão\" >= CURRENT_DATE - INTERVAL '16 days';\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        1184
+      ],
+      "id": "2ca5b2ed-080a-4ab1-8b3c-086503107ead",
+      "name": "listar_viagens",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "matriculos_jad",
+          "mode": "list",
+          "cachedResultName": "matriculos_jad"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "condition": "IS NOT NULL"
+            }
+          ]
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "nome_completo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        992
+      ],
+      "id": "64dd1da8-530d-4ec4-a4f6-f4b82ef19afb",
+      "name": "listar_motoristas",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Número": "={{ $json.body['Número'] }}",
+            "Data Emissão": "={{ $json.body['Data Emissão'] }}",
+            "matricula_motorista": "={{ $json.body.matricula_motorista }}",
+            "status": "={{ $json.body.status }}",
+            "Tipo": "Domicílio",
+            "metrica_da_lista": "Por Entrega",
+            "Qtd": 0,
+            "Peso": 0,
+            "Valor": 0,
+            "Rota": "={{ $json.body.Rota }}"
+          },
+          "matchingColumns": [
+            "Número"
+          ],
+          "schema": [
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qtd",
+              "displayName": "Qtd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "Peso",
+              "displayName": "Peso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "Data Emissão",
+              "displayName": "Data Emissão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "Data Baixa",
+              "displayName": "Data Baixa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "Rota",
+              "displayName": "Rota",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "pago",
+              "displayName": "pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "metrica_da_lista",
+              "displayName": "metrica_da_lista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "matricula_motorista",
+              "displayName": "matricula_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "obs",
+              "displayName": "obs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false,
+              "removed": true
+            },
+            {
+              "id": "revisado",
+              "displayName": "revisado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        1632
+      ],
+      "id": "2148e036-65c7-4111-917e-9007088ae16a",
+      "name": "listar_viagens2",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "revisado": "={{ $json.body.revisado }}",
+            "Número": "={{ $json.body.numero }}",
+            "metrica_da_lista": "={{ $json.body.metrica_da_lista }}",
+            "matricula_motorista": "={{ $json.body.matricula_motorista }}",
+            "obs": "={{ $json.body.obs }}"
+          },
+          "matchingColumns": [
+            "Número"
+          ],
+          "schema": [
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qtd",
+              "displayName": "Qtd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Peso",
+              "displayName": "Peso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Emissão",
+              "displayName": "Data Emissão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Baixa",
+              "displayName": "Data Baixa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rota",
+              "displayName": "Rota",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pago",
+              "displayName": "pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "metrica_da_lista",
+              "displayName": "metrica_da_lista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "matricula_motorista",
+              "displayName": "matricula_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "obs",
+              "displayName": "obs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "revisado",
+              "displayName": "revisado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        1856
+      ],
+      "id": "cf0bc302-0bf8-4426-8649-9fdb41c02cb3",
+      "name": "listar_viagens3",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "RevisarViagem",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        1856
+      ],
+      "id": "2de46ab6-e529-43c7-a68c-f8c9384e0458",
+      "name": "RevisarViagem1",
+      "webhookId": "c11eef82-d802-4cb3-b0c4-d2650c51f3e5"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Relatório de Produtividade — Motorista</title>\n<link href=\"https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap\" rel=\"stylesheet\">\n<style>\n  :root {\n    --bg: #0d0f14;\n    --surface: #161920;\n    --surface2: #1e2230;\n    --border: #2a2f3e;\n    --accent: #f0c040;\n    --accent2: #3de8a0;\n    --danger: #ff5a5a;\n    --warn: #ff9f40;\n    --text: #e8eaf0;\n    --muted: #6b7280;\n    --font-display: 'Bebas Neue', sans-serif;\n    --font-mono: 'IBM Plex Mono', monospace;\n    --font-body: 'IBM Plex Sans', sans-serif;\n  }\n\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n\n  body {\n    background: var(--bg);\n    color: var(--text);\n    font-family: var(--font-body);\n    min-height: 100vh;\n    overflow-x: hidden;\n  }\n\n  /* ─── GRID BACKGROUND ─── */\n  body::before {\n    content: '';\n    position: fixed;\n    inset: 0;\n    background-image:\n      linear-gradient(rgba(240,192,64,.04) 1px, transparent 1px),\n      linear-gradient(90deg, rgba(240,192,64,.04) 1px, transparent 1px);\n    background-size: 40px 40px;\n    pointer-events: none;\n    z-index: 0;\n  }\n\n  /* ─── LOGIN SCREEN ─── */\n  #login-screen {\n    position: fixed; inset: 0;\n    display: flex; align-items: center; justify-content: center;\n    z-index: 100;\n    background: var(--bg);\n  }\n\n  .login-card {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-top: 3px solid var(--accent);\n    padding: 48px 40px;\n    width: 100%;\n    max-width: 420px;\n    position: relative;\n    z-index: 1;\n  }\n\n  .login-card::before {\n    content: '';\n    position: absolute;\n    top: -1px; left: 40px; right: 40px;\n    height: 3px;\n    background: var(--accent);\n    filter: blur(6px);\n    opacity: .6;\n  }\n\n  .login-logo {\n    font-family: var(--font-display);\n    font-size: 2.8rem;\n    letter-spacing: 3px;\n    color: var(--accent);\n    margin-bottom: 4px;\n  }\n\n  .login-sub {\n    font-family: var(--font-mono);\n    font-size: .7rem;\n    letter-spacing: 2px;\n    color: var(--muted);\n    text-transform: uppercase;\n    margin-bottom: 40px;\n  }\n\n  .field-group {\n    margin-bottom: 20px;\n  }\n\n  .field-group label {\n    display: block;\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    letter-spacing: 2px;\n    text-transform: uppercase;\n    color: var(--muted);\n    margin-bottom: 8px;\n  }\n\n  .field-group input {\n    width: 100%;\n    background: var(--bg);\n    border: 1px solid var(--border);\n    color: var(--text);\n    font-family: var(--font-mono);\n    font-size: 1rem;\n    padding: 12px 16px;\n    outline: none;\n    transition: border-color .2s;\n  }\n\n  .field-group input:focus {\n    border-color: var(--accent);\n  }\n\n  .btn-login {\n    width: 100%;\n    background: var(--accent);\n    color: #0d0f14;\n    border: none;\n    font-family: var(--font-display);\n    font-size: 1.2rem;\n    letter-spacing: 3px;\n    padding: 14px;\n    cursor: pointer;\n    margin-top: 8px;\n    transition: opacity .2s, transform .1s;\n  }\n\n  .btn-login:hover { opacity: .9; }\n  .btn-login:active { transform: scale(.99); }\n\n  .login-error {\n    margin-top: 16px;\n    font-family: var(--font-mono);\n    font-size: .75rem;\n    color: var(--danger);\n    display: none;\n  }\n\n  /* ─── MAIN DASHBOARD ─── */\n  #dashboard {\n    display: none;\n    position: relative;\n    z-index: 1;\n    min-height: 100vh;\n    padding: 0 0 60px;\n  }\n\n  /* ─── TOP BAR ─── */\n  .topbar {\n    background: var(--surface);\n    border-bottom: 1px solid var(--border);\n    padding: 0 32px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    height: 60px;\n    position: sticky;\n    top: 0;\n    z-index: 50;\n  }\n\n  .topbar-brand {\n    font-family: var(--font-display);\n    font-size: 1.5rem;\n    letter-spacing: 3px;\n    color: var(--accent);\n  }\n\n  .topbar-info {\n    font-family: var(--font-mono);\n    font-size: .7rem;\n    color: var(--muted);\n    text-align: right;\n  }\n\n  .topbar-info span {\n    color: var(--text);\n    font-weight: 600;\n  }\n\n  .btn-logout {\n    background: transparent;\n    border: 1px solid var(--border);\n    color: var(--muted);\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    letter-spacing: 1px;\n    padding: 6px 12px;\n    cursor: pointer;\n    margin-left: 24px;\n    transition: color .2s, border-color .2s;\n  }\n\n  .btn-logout:hover { color: var(--danger); border-color: var(--danger); }\n\n  /* ─── HERO HEADER ─── */\n  .hero {\n    padding: 40px 32px 0;\n    display: flex;\n    gap: 32px;\n    align-items: flex-end;\n    flex-wrap: wrap;\n  }\n\n  .driver-name {\n    font-family: var(--font-display);\n    font-size: clamp(2.5rem, 6vw, 5rem);\n    letter-spacing: 4px;\n    line-height: 1;\n    color: var(--text);\n  }\n\n  .driver-name em {\n    color: var(--accent);\n    font-style: normal;\n  }\n\n  .quinzena-badge {\n    background: var(--surface2);\n    border: 1px solid var(--border);\n    padding: 8px 16px;\n    font-family: var(--font-mono);\n    font-size: .7rem;\n    letter-spacing: 1px;\n    color: var(--accent2);\n    margin-bottom: 12px;\n    white-space: nowrap;\n    user-select: none;\n  }\n\n  /* ─── LOADING ─── */\n  .loading-state {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 80px 32px;\n    font-family: var(--font-mono);\n    color: var(--muted);\n    font-size: .8rem;\n    letter-spacing: 2px;\n  }\n\n  .spinner {\n    width: 20px; height: 20px;\n    border: 2px solid var(--border);\n    border-top-color: var(--accent);\n    border-radius: 50%;\n    animation: spin .7s linear infinite;\n  }\n\n  @keyframes spin { to { transform: rotate(360deg); } }\n\n  /* ─── KPI STRIP ─── */\n  .kpi-strip {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\n    gap: 1px;\n    background: var(--border);\n    margin: 32px 32px 0;\n    border: 1px solid var(--border);\n  }\n\n  .kpi {\n    background: var(--surface);\n    padding: 24px 20px;\n    position: relative;\n    overflow: hidden;\n  }\n\n  .kpi::after {\n    content: '';\n    position: absolute;\n    bottom: 0; left: 0; right: 0;\n    height: 2px;\n  }\n\n  .kpi.green::after { background: var(--accent2); }\n  .kpi.yellow::after { background: var(--accent); }\n  .kpi.red::after { background: var(--danger); }\n  .kpi.warn::after { background: var(--warn); }\n\n  .kpi-label {\n    font-family: var(--font-mono);\n    font-size: .6rem;\n    letter-spacing: 2px;\n    text-transform: uppercase;\n    color: var(--muted);\n    margin-bottom: 10px;\n  }\n\n  .kpi-value {\n    font-family: var(--font-display);\n    font-size: 2.4rem;\n    letter-spacing: 2px;\n    line-height: 1;\n  }\n\n  .kpi.green .kpi-value { color: var(--accent2); }\n  .kpi.yellow .kpi-value { color: var(--accent); }\n  .kpi.red .kpi-value { color: var(--danger); }\n  .kpi.warn .kpi-value { color: var(--warn); }\n\n  .kpi-detail {\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    color: var(--muted);\n    margin-top: 6px;\n  }\n\n  /* ─── SECTIONS ─── */\n  .sections {\n    padding: 32px;\n    display: grid;\n    grid-template-columns: 1fr 1fr;\n    gap: 24px;\n  }\n\n  @media (max-width: 860px) {\n    .sections { grid-template-columns: 1fr; }\n  }\n\n  .section {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    padding: 24px;\n  }\n\n  .section.full { grid-column: 1 / -1; }\n\n  .section-title {\n    font-family: var(--font-display);\n    font-size: 1.2rem;\n    letter-spacing: 3px;\n    color: var(--accent);\n    margin-bottom: 4px;\n    display: flex;\n    align-items: center;\n    gap: 10px;\n  }\n\n  .section-title .icon {\n    width: 22px; height: 22px;\n    display: flex; align-items: center; justify-content: center;\n    font-size: .9rem;\n  }\n\n  .section-sub {\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n    margin-bottom: 20px;\n  }\n\n  /* ─── TABLE ─── */\n  .data-table {\n    width: 100%;\n    border-collapse: collapse;\n    font-family: var(--font-mono);\n    font-size: .75rem;\n  }\n\n  .data-table th {\n    text-align: left;\n    font-size: .6rem;\n    letter-spacing: 2px;\n    text-transform: uppercase;\n    color: var(--muted);\n    padding: 8px 12px;\n    border-bottom: 1px solid var(--border);\n  }\n\n  .data-table td {\n    padding: 10px 12px;\n    border-bottom: 1px solid rgba(42,47,62,.6);\n    color: var(--text);\n  }\n\n  .data-table tr:last-child td { border-bottom: none; }\n\n  .data-table tr:hover td { background: var(--surface2); }\n\n  .badge {\n    display: inline-block;\n    padding: 2px 8px;\n    font-size: .6rem;\n    letter-spacing: 1px;\n    text-transform: uppercase;\n    font-family: var(--font-mono);\n    border-radius: 2px;\n  }\n\n  .badge-green { background: rgba(61,232,160,.15); color: var(--accent2); }\n  .badge-red { background: rgba(255,90,90,.15); color: var(--danger); }\n  .badge-warn { background: rgba(255,159,64,.15); color: var(--warn); }\n\n  /* ─── BAR CHART ─── */\n  .bar-chart {\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n  }\n\n  .bar-row {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n  }\n\n  .bar-label {\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    color: var(--muted);\n    width: 80px;\n    flex-shrink: 0;\n    text-align: right;\n  }\n\n  .bar-track {\n    flex: 1;\n    background: var(--surface2);\n    height: 20px;\n    position: relative;\n    overflow: hidden;\n  }\n\n  .bar-fill {\n    height: 100%;\n    background: var(--accent2);\n    transition: width 1s cubic-bezier(.23,1,.32,1);\n  }\n\n  .bar-fill.warn { background: var(--warn); }\n  .bar-fill.accent { background: var(--accent); }\n\n  .bar-val {\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    color: var(--text);\n    width: 30px;\n    flex-shrink: 0;\n  }\n\n  /* ─── EFFICIENCY GAUGE ─── */\n  .gauge-wrap {\n    display: flex;\n    align-items: center;\n    gap: 32px;\n    flex-wrap: wrap;\n  }\n\n  .gauge-ring {\n    position: relative;\n    width: 120px;\n    height: 120px;\n    flex-shrink: 0;\n  }\n\n  .gauge-ring svg {\n    transform: rotate(-90deg);\n  }\n\n  .gauge-center {\n    position: absolute;\n    inset: 0;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n  }\n\n  .gauge-pct {\n    font-family: var(--font-display);\n    font-size: 1.8rem;\n    line-height: 1;\n    color: var(--accent2);\n  }\n\n  .gauge-pct.warn { color: var(--warn); }\n  .gauge-pct.danger { color: var(--danger); }\n\n  .gauge-sub-label {\n    font-family: var(--font-mono);\n    font-size: .5rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n  }\n\n  .gauge-detail {\n    flex: 1;\n  }\n\n  .gauge-row {\n    display: flex;\n    justify-content: space-between;\n    padding: 8px 0;\n    border-bottom: 1px solid var(--border);\n    font-family: var(--font-mono);\n    font-size: .72rem;\n  }\n\n  .gauge-row:last-child { border-bottom: none; }\n\n  .gauge-row .lbl { color: var(--muted); }\n  .gauge-row .val { color: var(--text); font-weight: 600; }\n\n  /* ─── EMPTY STATE ─── */\n  .empty {\n    text-align: center;\n    padding: 40px 0;\n    font-family: var(--font-mono);\n    font-size: .75rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n  }\n\n  /* ─── LISTAS / VIAGENS ─── */\n  .listas-grid {\n    display: grid;\n    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));\n    gap: 12px;\n    margin-top: 4px;\n  }\n\n  .lista-card {\n    background: var(--bg);\n    border: 1px solid var(--border);\n    padding: 16px;\n    position: relative;\n    transition: border-color .2s;\n  }\n\n  .lista-card:hover { border-color: var(--accent); }\n\n  .lista-card-header {\n    display: flex;\n    justify-content: space-between;\n    align-items: flex-start;\n    margin-bottom: 12px;\n  }\n\n  .lista-numero {\n    font-family: var(--font-display);\n    font-size: 1.4rem;\n    letter-spacing: 2px;\n    color: var(--accent);\n    line-height: 1;\n  }\n\n  .lista-rota {\n    font-family: var(--font-mono);\n    font-size: .65rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n    margin-top: 2px;\n    text-transform: uppercase;\n  }\n\n  .lista-metrica-badge {\n    font-family: var(--font-mono);\n    font-size: .58rem;\n    letter-spacing: 1px;\n    text-transform: uppercase;\n    padding: 3px 8px;\n    border-radius: 2px;\n    background: rgba(240,192,64,.12);\n    color: var(--accent);\n    border: 1px solid rgba(240,192,64,.25);\n    white-space: nowrap;\n  }\n\n  .lista-metrica-badge.sem-metrica {\n    background: rgba(107,114,128,.1);\n    color: var(--muted);\n    border-color: var(--border);\n  }\n\n  .lista-stats {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr;\n    gap: 8px;\n    margin-bottom: 12px;\n  }\n\n  .lista-stat {\n    text-align: center;\n  }\n\n  .lista-stat-val {\n    font-family: var(--font-display);\n    font-size: 1.1rem;\n    color: var(--text);\n    line-height: 1;\n  }\n\n  .lista-stat-lbl {\n    font-family: var(--font-mono);\n    font-size: .55rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n    text-transform: uppercase;\n  }\n\n  .lista-valor {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding-top: 10px;\n    border-top: 1px solid var(--border);\n  }\n\n  .lista-valor-lbl {\n    font-family: var(--font-mono);\n    font-size: .6rem;\n    color: var(--muted);\n    letter-spacing: 1px;\n    text-transform: uppercase;\n  }\n\n  .lista-valor-num {\n    font-family: var(--font-display);\n    font-size: 1.1rem;\n    color: var(--accent2);\n    letter-spacing: 1px;\n  }\n\n  .lista-valor-num.sem-valor { color: var(--muted); }\n\n  .metrica-resumo {\n    background: var(--surface2);\n    border: 1px solid var(--border);\n    border-left: 3px solid var(--accent);\n    padding: 14px 18px;\n    margin-bottom: 20px;\n    display: flex;\n    align-items: center;\n    gap: 20px;\n    flex-wrap: wrap;\n  }\n\n  .metrica-resumo-item {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n  }\n\n  .metrica-resumo-lbl {\n    font-family: var(--font-mono);\n    font-size: .58rem;\n    color: var(--muted);\n    letter-spacing: 2px;\n    text-transform: uppercase;\n  }\n\n  .metrica-resumo-val {\n    font-family: var(--font-mono);\n    font-size: .85rem;\n    color: var(--accent);\n    font-weight: 600;\n  }\n\n  /* ─── FOOTER ─── */\n  .footer {\n    padding: 20px 32px;\n    font-family: var(--font-mono);\n    font-size: .6rem;\n    color: var(--border);\n    letter-spacing: 1px;\n    text-align: center;\n  }\n\n  /* ─── ANIMATIONS ─── */\n  .fade-in {\n    animation: fadeIn .5s ease both;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; transform: translateY(12px); }\n    to   { opacity: 1; transform: translateY(0); }\n  }\n\n  .stagger-1 { animation-delay: .1s; }\n  .stagger-2 { animation-delay: .2s; }\n  .stagger-3 { animation-delay: .3s; }\n  .stagger-4 { animation-delay: .4s; }\n</style>\n</head>\n<body>\n\n<!-- ─── LOGIN ─── -->\n<div id=\"login-screen\">\n  <div class=\"login-card\">\n    <div class=\"login-logo\">INTUITIVA LOG</div>\n    <div class=\"login-sub\">Portal do Motorista · v4 · Relatório de Produtividade</div>\n\n    <div class=\"field-group\">\n      <label>Matrícula</label>\n      <input type=\"text\" id=\"inp-matricula\" placeholder=\"Ex: 1234\" autocomplete=\"off\" />\n    </div>\n\n    <div class=\"field-group\">\n      <label>CPF</label>\n      <input type=\"text\" id=\"inp-cpf\" placeholder=\"Somente números\" autocomplete=\"off\" maxlength=\"11\" />\n    </div>\n\n    <button class=\"btn-login\" id=\"btn-entrar\">ENTRAR</button>\n    <div class=\"login-error\" id=\"login-error\">Matrícula ou CPF inválido. Tente novamente.</div>\n  </div>\n</div>\n\n<!-- ─── DASHBOARD ─── -->\n<div id=\"dashboard\">\n\n  <div class=\"topbar\">\n    <div class=\"topbar-brand\">INTUITIVA LOG</div>\n    <div style=\"display:flex;align-items:center;gap:16px;\">\n      <a href= style=\"font-family:var(--font-mono);font-size:.62rem;color:var(--muted);letter-spacing:1px;text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:color .15s;\" onmouseover=\"this.style.color='var(--accent)'\" onmouseout=\"this.style.color='var(--muted)'\">ANTECIPAR PAGAMENTO →</a>\n      <div class=\"topbar-info\">\n        MOTORISTA <span id=\"tb-nome\">—</span><br>\n        MATRÍCULA <span id=\"tb-mat\">—</span>\n      </div>\n      <button class=\"btn-logout\" id=\"btn-logout\">SAIR</button>\n    </div>\n  </div>\n\n  <div id=\"main-loading\" class=\"loading-state\">\n    <div class=\"spinner\"></div>\n    CARREGANDO DADOS DA ÚLTIMA QUINZENA...\n  </div>\n\n  <div id=\"main-content\" style=\"display:none;\">\n\n    <div class=\"hero fade-in\">\n      <div>\n        <div class=\"driver-name\"><em id=\"hero-nome\">—</em></div>\n        <div style=\"font-family:var(--font-mono);font-size:.7rem;color:var(--muted);letter-spacing:2px;margin-top:6px;\" id=\"hero-mat\">—</div>\n      </div>\n      <div style=\"display:flex;flex-direction:column;gap:8px;\">\n        <div style=\"font-family:var(--font-mono);font-size:.6rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;\">Selecionar Quinzena</div>\n        <div style=\"display:flex;align-items:center;gap:0;\">\n          <button id=\"btn-qz-prev\" title=\"Quinzena anterior\" style=\"background:var(--surface2);border:1px solid var(--border);border-right:none;color:var(--muted);width:32px;height:36px;cursor:pointer;font-size:1rem;transition:color .15s;\" onmouseover=\"this.style.color='var(--accent)'\" onmouseout=\"this.style.color='var(--muted)'\">&#8249;</button>\n          <div class=\"quinzena-badge\" id=\"quinzena-label\" style=\"margin-bottom:0;min-width:220px;text-align:center;\">QUINZENA: —</div>\n          <button id=\"btn-qz-next\" title=\"Próxima quinzena\" style=\"background:var(--surface2);border:1px solid var(--border);border-left:none;color:var(--muted);width:32px;height:36px;cursor:pointer;font-size:1rem;transition:color .15s;\" onmouseover=\"this.style.color='var(--accent)'\" onmouseout=\"this.style.color='var(--muted)'\">&#8250;</button>\n        </div>\n        <div id=\"pagamento-label\" style=\"font-family:var(--font-mono);font-size:.65rem;color:var(--accent2);letter-spacing:1px;display:none;\">\n          💰 PAGAMENTO PREVISTO: <span id=\"pagamento-data\" style=\"font-weight:600;color:var(--accent);\"></span>\n        </div>\n      </div>\n    </div>\n\n    <!-- KPIs -->\n    <div class=\"kpi-strip fade-in stagger-1\">\n      <div class=\"kpi green\">\n        <div class=\"kpi-label\">CTes Entregues</div>\n        <div class=\"kpi-value\" id=\"kpi-ctes\">0</div>\n        <div class=\"kpi-detail\">na quinzena</div>\n      </div>\n      <div class=\"kpi yellow\">\n        <div class=\"kpi-label\">Dias Trabalhados</div>\n        <div class=\"kpi-value\" id=\"kpi-dias\">0</div>\n        <div class=\"kpi-detail\">com registros</div>\n      </div>\n      <div class=\"kpi warn\">\n        <div class=\"kpi-label\">Insucessos</div>\n        <div class=\"kpi-value\" id=\"kpi-insucessos\">0</div>\n        <div class=\"kpi-detail\" id=\"kpi-ins-pct\">—</div>\n      </div>\n      <div class=\"kpi red\">\n        <div class=\"kpi-label\">Reclamações</div>\n        <div class=\"kpi-value\" id=\"kpi-reclam\">0</div>\n        <div class=\"kpi-detail\" id=\"kpi-rec-pct\">—</div>\n      </div>\n      <div class=\"kpi\" style=\"border-bottom:2px solid var(--accent2);\">\n        <div class=\"kpi-label\">Total a Receber</div>\n        <div class=\"kpi-value\" id=\"kpi-total\" style=\"color:var(--accent2);font-size:1.6rem;\">R$ —</div>\n        <div class=\"kpi-detail\" id=\"kpi-xpt-unit\">—</div>\n      </div>\n    </div>\n\n    <!-- Seções -->\n    <div class=\"sections\">\n\n      <!-- Produtividade por dia -->\n      <div class=\"section full fade-in stagger-2\">\n        <div class=\"section-title\"><span class=\"icon\">📦</span> RELATÓRIO DE PRODUTIVIDADE</div>\n        <div class=\"section-sub\">CTes com evento de ENTREGA — por data</div>\n        <div class=\"bar-chart\" id=\"prod-bars\"></div>\n        <div style=\"margin-top:20px;border-top:1px solid var(--border);padding-top:16px;\">\n          <table class=\"data-table\" id=\"prod-table\">\n            <thead>\n              <tr>\n                <th>Data</th>\n                <th>CTes Entregues</th>\n                <th>Pacotes</th>\n                <th>Peso (kg)</th>\n                <th>Valor Pago (R$)</th>\n              </tr>\n            </thead>\n            <tbody id=\"prod-tbody\"></tbody>\n          </table>\n        </div>\n      </div>\n\n      <!-- Eficiência -->\n      <div class=\"section fade-in stagger-3\">\n        <div class=\"section-title\"><span class=\"icon\">📊</span> EFICIÊNCIA</div>\n        <div class=\"section-sub\">Proporção de entregas × insucessos</div>\n        <div class=\"gauge-wrap\">\n          <div class=\"gauge-ring\">\n            <svg width=\"120\" height=\"120\" viewBox=\"0 0 120 120\">\n              <circle cx=\"60\" cy=\"60\" r=\"50\" fill=\"none\" stroke=\"var(--border)\" stroke-width=\"10\"/>\n              <circle cx=\"60\" cy=\"60\" r=\"50\" fill=\"none\"\n                stroke=\"var(--accent2)\" stroke-width=\"10\"\n                stroke-dasharray=\"314\"\n                stroke-dashoffset=\"314\"\n                stroke-linecap=\"round\"\n                id=\"gauge-arc\"\n                style=\"transition: stroke-dashoffset 1.2s cubic-bezier(.23,1,.32,1)\"/>\n            </svg>\n            <div class=\"gauge-center\">\n              <div class=\"gauge-pct\" id=\"gauge-pct\">0%</div>\n              <div class=\"gauge-sub-label\">eficiência</div>\n            </div>\n          </div>\n          <div class=\"gauge-detail\">\n            <div class=\"gauge-row\">\n              <span class=\"lbl\">TOTAL EVENTOS</span>\n              <span class=\"val\" id=\"ef-total\">0</span>\n            </div>\n            <div class=\"gauge-row\">\n              <span class=\"lbl\">ENTREGAS</span>\n              <span class=\"val\" id=\"ef-entrega\">0</span>\n            </div>\n            <div class=\"gauge-row\">\n              <span class=\"lbl\">INSUCESSOS</span>\n              <span class=\"val\" id=\"ef-insucesso\">0</span>\n            </div>\n          </div>\n        </div>\n        <div style=\"margin-top:20px;\">\n          <table class=\"data-table\" id=\"ef-table\">\n            <thead>\n              <tr>\n                <th>Evento</th>\n                <th>Qtd</th>\n                <th>%</th>\n              </tr>\n            </thead>\n            <tbody id=\"ef-tbody\"></tbody>\n          </table>\n        </div>\n      </div>\n\n      <!-- Reclamações -->\n      <div class=\"section fade-in stagger-4\">\n        <div class=\"section-title\"><span class=\"icon\">⚠️</span> RECLAMAÇÕES</div>\n        <div class=\"section-sub\">Cruzamento com tabela acareacaojad</div>\n        <div id=\"rec-content\">\n          <div class=\"empty\">CARREGANDO...</div>\n        </div>\n      </div>\n\n      <!-- Listas / Viagens -->\n      <div class=\"section full fade-in stagger-4\" id=\"section-listas\">\n        <div class=\"section-title\"><span class=\"icon\">🚚</span> LISTAS / VIAGENS DA QUINZENA</div>\n        <div class=\"section-sub\">Valor calculado pela métrica de cada lista</div>\n        <div id=\"listas-content\"><div class=\"empty\">CARREGANDO...</div></div>\n      </div>\n\n    </div>\n\n    <div class=\"footer\">SISTEMA DE GESTÃO DE MOTORISTAS · QUINZENA ATUAL · DADOS VIA N8N WEBHOOK</div>\n  </div>\n</div>\n\n<script>\n// ────────────────────────────────────────────────\n// CONFIGURAÇÃO DO WEBHOOK\n// Substitua pela URL real do seu webhook no n8n\n// ────────────────────────────────────────────────\nconst WEBHOOK_URL = 'https://webhook.sactudo.com.br/webhook/Dados';\n\n// Eventos considerados ENTREGA EFETIVA\nconst EVENTOS_ENTREGA = ['entrega'];\n\n// Eventos considerados INSUCESSO\nconst EVENTOS_INSUCESSO = [\n  'tentativa de entrega',\n  'ausente',\n  'recusado',\n  'endereco nao encontrado',\n  'endereço não encontrado',\n  'avaria',\n  'aguardando retirada',\n  'devolvido',\n  'restricao de acesso / movimentacao',\n  'restrição de acesso',\n  'nao localizado',\n  'não localizado',\n  'cliente nao encontrado',\n  'fora da area',\n  'retorno',\n  'sinistro',\n  'extravio',\n];\n\n// ────────────────────────────────────────────────\n// ESTADO\n// ────────────────────────────────────────────────\nlet currentDriver = null;\n\n// ────────────────────────────────────────────────\n// UTILITÁRIOS\n// ────────────────────────────────────────────────\nconst $ = id => document.getElementById(id);\n\nfunction parseCPF(v) {\n  return v.replace(/\\D/g, '');\n}\n\nfunction formatDate(d) {\n  if (!d) return '—';\n  // Suporta ISO \"2025-12-27T03:00:00.000Z\" e simples \"2025-12-27\"\n  const match = String(d).match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n  if (match) return `${match[3]}/${match[2]}/${match[1]}`;\n  return String(d);\n}\n\nfunction toDateKey(d) {\n  if (!d) return '';\n  return String(d).slice(0, 10);\n}\n\nfunction formatMoney(v) {\n  const n = parseFloat(v) || 0;\n  return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });\n}\n\n// Converte \"R$ 4,00\" ou \"4,00\" ou \"4.00\" para número float\nfunction parseValorXpt(v) {\n  if (!v) return 0;\n  const s = String(v)\n    .replace(/R\\$\\s*/gi, '')   // remove \"R$ \"\n    .replace(/\\./g, '')          // remove separador de milhar \".\"\n    .replace(',', '.');           // troca vírgula decimal por ponto\n  return parseFloat(s) || 0;\n}\n\nfunction getQuinzena(dates) {\n  if (!dates || !dates.length) return '—';\n  const sorted = [...dates].sort();\n  const first = sorted[0];\n  const last  = sorted[sorted.length - 1];\n  return `${formatDate(first)} — ${formatDate(last)}`;\n}\n\n// Retorna todas as quinzenas disponíveis nos dados, ordenadas da mais recente para a mais antiga\nfunction getAllQuinzenas(rows, dateKey) {\n  if (!rows || !rows.length) return [];\n\n  const allDates = [...new Set(rows.map(r => toDateKey(r[dateKey])))].filter(Boolean).sort();\n  const quinzenasMap = {};\n\n  allDates.forEach(function(dateStr) {\n    const d = new Date(dateStr);\n    const year = d.getFullYear();\n    const month = d.getMonth();\n    const day = d.getDate();\n    const half = day <= 15 ? 1 : 2;\n    const key = year + '-' + month + '-' + half;\n\n    if (!quinzenasMap[key]) {\n      let start, end;\n      if (half === 1) {\n        start = new Date(year, month, 1);\n        end   = new Date(year, month, 15);\n      } else {\n        start = new Date(year, month, 16);\n        end   = new Date(year, month + 1, 0);\n      }\n      quinzenasMap[key] = { start: start, end: end, key: key };\n    }\n  });\n\n  // Ordena do mais recente para o mais antigo\n  return Object.values(quinzenasMap).sort(function(a, b) {\n    return b.start - a.start;\n  });\n}\n\n// Filtra linhas de uma quinzena específica { start, end }\nfunction filterQuinzena(rows, dateKey, quinzena) {\n  const filtered = rows.filter(function(r) {\n    const d = new Date(toDateKey(r[dateKey]));\n    return d >= quinzena.start && d <= quinzena.end;\n  });\n  const fmt = function(d) { return d.toLocaleDateString('pt-BR'); };\n  const label = fmt(quinzena.start) + ' — ' + fmt(quinzena.end);\n  return { rows: filtered, label: label };\n}\n\n// Calcula 5 dias úteis após uma data (pula sábados e domingos)\nfunction calcPagamento(endDate) {\n  var d = new Date(endDate);\n  d.setDate(d.getDate() + 1); // começa no dia seguinte ao fim da quinzena\n  var uteis = 0;\n  while (uteis < 5) {\n    var dow = d.getDay();\n    if (dow !== 0 && dow !== 6) uteis++;\n    if (uteis < 5) d.setDate(d.getDate() + 1);\n  }\n  return d;\n}\n\n// Compat: última quinzena\nfunction filterUltimaQuinzena(rows, dateKey) {\n  const quinzenas = getAllQuinzenas(rows, dateKey);\n  if (!quinzenas.length) return { rows: [], label: '—' };\n  return filterQuinzena(rows, dateKey, quinzenas[0]);\n}\n\n\n// ────────────────────────────────────────────────\n// NORMALIZA RESPOSTA DO WEBHOOK\n// Aceita múltiplos formatos que o n8n pode retornar\n// ────────────────────────────────────────────────\nfunction normalizeWebhookResponse(data, matricula, cpf) {\n  console.log('[JAD] normalizeWebhookResponse, tipo:', typeof data, Array.isArray(data) ? '(array len=' + data.length + ')' : '');\n\n  // Formato 1: { motorista, entregas, reclamacoes } — ideal\n  if (data && !Array.isArray(data) && data.motorista && data.entregas) {\n    console.log('[JAD] Formato 1: {motorista, entregas, reclamacoes}');\n    return data;\n  }\n\n  // Formato 2: n8n Merge node retorna array de objetos mesclados\n  // Cada item pode ter campos de múltiplas tabelas juntos, ou\n  // pode ser array misto com linhas de tabelas diferentes\n  if (Array.isArray(data)) {\n    console.log('[JAD] Formato 2: array com', data.length, 'itens');\n\n    // Sub-formato 2a: array de wrappers { motorista:[...], entregas:[...], reclamacoes:[...] }\n    if (data.length > 0 && (data[0].entregas || data[0].motorista || data[0].reclamacoes)) {\n      var merged = { motorista: null, entregas: [], reclamacoes: [], frete: [], listas: [] };\n      data.forEach(function(item) {\n        if (item.motorista) merged.motorista = Array.isArray(item.motorista) ? item.motorista[0] : item.motorista;\n        if (item.entregas) merged.entregas = merged.entregas.concat(item.entregas);\n        if (item.reclamacoes) merged.reclamacoes = merged.reclamacoes.concat(item.reclamacoes);\n        if (item.frete) merged.frete = merged.frete.concat(item.frete);\n        if (item.listas) merged.listas = merged.listas.concat(item.listas);\n      });\n      if (merged.entregas.length || merged.motorista) {\n        console.log('[JAD] Sub-formato 2a: wrappers mesclados');\n        if (!merged.motorista && merged.entregas.length) {\n          merged.motorista = buildMotoristaFromEntrega(merged.entregas[0]);\n        }\n        return merged;\n      }\n    }\n\n    // Sub-formato 2b: n8n Merge (Combine) — cada item tem campos das 3 tabelas lado a lado\n    // ex: { OperadorMatricula, Evento, Data, ..., ctes, assunto, ... , nome_completo, ... }\n    var entregas = [];\n    var reclamacoes = [];\n    var motorista = null;\n    var frete = [];\n    var listas = [];\n\n    data.forEach(function(item) {\n      // Linha de entrega: tem Evento e NCTE\n      if (item.NCTE !== undefined || item.Evento !== undefined) {\n        entregas.push(item);\n      }\n      // Linha de reclamação: tem ctes mas não Evento nem NCTE\n      else if (item.ctes !== undefined && item.NCTE === undefined && item.Evento === undefined) {\n        reclamacoes.push(item);\n      }\n      // Linha de tabela_frete_motorista: tem metrica e valor_frete\n      else if (item.metrica !== undefined && item.valor_frete !== undefined) {\n        frete.push(item);\n      }\n      // Linha de lista_entregas: tem Número e metrica_da_lista (ou Rota/status)\n      else if (item['Número'] !== undefined || (item.Rota !== undefined && item.status !== undefined)) {\n        listas.push(item);\n      }\n      // Linha de cadastro: tem nome_completo ou pgro\n      else if ((item.nome_completo !== undefined || item.pgro !== undefined) && !motorista) {\n        motorista = item;\n      }\n    });\n\n    console.log('[JAD] Sub-formato 2b - entregas:', entregas.length, 'rec:', reclamacoes.length, 'mot:', !!motorista);\n\n    // Filtra entregas pela matrícula digitada\n    var entregasFiltradas = entregas.filter(function(e) {\n      return String(e.OperadorMatricula) === String(matricula);\n    });\n\n    // Se não filtrou, aceita todas (webhook já pode ter filtrado)\n    if (!entregasFiltradas.length && entregas.length) {\n      console.log('[JAD] Sem filtro por matrícula, usando todas as entregas');\n      entregasFiltradas = entregas;\n    }\n\n    if (!entregasFiltradas.length && !motorista) {\n      console.warn('[JAD] Nenhum dado encontrado');\n      return null;\n    }\n\n    if (!motorista && entregasFiltradas.length) {\n      motorista = buildMotoristaFromEntrega(entregasFiltradas[0]);\n    }\n\n    return { motorista: motorista, entregas: entregasFiltradas, reclamacoes: reclamacoes, frete: frete, listas: listas };\n  }\n\n  // Formato 3: objeto único no root com campos misturados\n  if (data && typeof data === 'object') {\n    console.log('[JAD] Formato 3: objeto único');\n    return {\n      motorista: buildMotoristaFromEntrega(data),\n      entregas: data.entregas || (data.NCTE ? [data] : []),\n      reclamacoes: data.reclamacoes || [],\n      frete: data.frete || [],\n      listas: data.listas || [],\n    };\n  }\n\n  return null;\n}\n\nfunction buildMotoristaFromEntrega(row) {\n  return {\n    OperadorMatricula: row.OperadorMatricula,\n    nome_completo: row.nome_completo || row.OperadorNome || 'Motorista',\n    nom_tab: row.nom_tab || '',\n    pgro: row.pgro || '',\n    telefone: row.telefone || '',\n  };\n}\n\n// ────────────────────────────────────────────────\n// LOGIN\n// ────────────────────────────────────────────────\nasync function handleLogin() {\n  const matricula = $('inp-matricula').value.trim();\n  const cpf = parseCPF($('inp-cpf').value);\n\n  if (!matricula || cpf.length < 11) {\n    showLoginError('Preencha matrícula e CPF completo (11 dígitos).');\n    return;\n  }\n\n  $('btn-entrar').textContent = 'AGUARDE...';\n  $('btn-entrar').disabled = true;\n  $('login-error').style.display = 'none';\n\n  try {\n    console.log('[JAD] Chamando webhook POST:', WEBHOOK_URL);\n    console.log('[JAD] Payload:', { matricula, cpf });\n\n    const res = await fetch(WEBHOOK_URL, {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({ matricula: matricula, cpf: cpf })\n    });\n\n    console.log('[JAD] HTTP status:', res.status);\n\n    if (!res.ok) {\n      const errText = await res.text();\n      console.error('[JAD] Erro HTTP:', errText);\n      throw new Error('Servidor retornou erro ' + res.status);\n    }\n\n    const raw = await res.text();\n    console.log('[JAD] Resposta bruta:', raw.slice(0, 500));\n\n    let data;\n    try {\n      data = JSON.parse(raw);\n    } catch(parseErr) {\n      console.error('[JAD] JSON inválido:', parseErr);\n      throw new Error('Resposta do servidor não é JSON válido.');\n    }\n\n    console.log('[JAD] Dados recebidos:', Array.isArray(data) ? data.length + ' itens' : typeof data);\n\n    // Normaliza qualquer formato que o n8n com Merge retorne\n    var normalized = normalizeWebhookResponse(data, matricula, cpf);\n    if (!normalized) {\n      console.warn('[JAD] Nenhum dado encontrado para matrícula:', matricula);\n      showLoginError('Matrícula ou CPF inválido.');\n      return;\n    }\n\n    console.log('[JAD] Motorista:', normalized.motorista);\n    console.log('[JAD] Entregas:', normalized.entregas.length);\n    console.log('[JAD] Reclamações:', normalized.reclamacoes.length);\n\n    currentDriver = normalized;\n    renderDashboard(normalized);\n\n  } catch (e) {\n    console.error('[JAD] ERRO NA REQUISIÇÃO:', e.name, e.message, e);\n    const msg = e.name === 'TypeError' && e.message.includes('fetch')\n      ? 'Erro de conexão ou CORS. Verifique se o n8n está acessível e com CORS habilitado. Detalhe: ' + e.message\n      : 'Erro: ' + e.message;\n    showLoginError(msg);\n  }\n\n  $('btn-entrar').textContent = 'ENTRAR';\n  $('btn-entrar').disabled = false;\n}\n\nfunction showLoginError(msg) {\n  const el = $('login-error');\n  el.textContent = msg;\n  el.style.display = 'block';\n  $('btn-entrar').textContent = 'ENTRAR';\n  $('btn-entrar').disabled = false;\n}\n\n// ────────────────────────────────────────────────\n// DADOS DEMO\n// ────────────────────────────────────────────────\nfunction generateDemoData(matricula) {\n  const eventos = ['entrega', 'entrega', 'entrega', 'entrega', 'entrega',\n                   'tentativa de entrega', 'ausente', 'recusado', 'restricao de acesso / movimentacao', 'entrega'];\n\n  const now = new Date();\n  const day = now.getDate();\n  const startDay = day <= 15 ? 1 : 16;\n  const numDays  = day <= 15 ? day : day - 15;\n\n  const entregas = [];\n  const reclamacaoCtes = [];\n\n  for (let i = 0; i < numDays; i++) {\n    const d = new Date(now.getFullYear(), now.getMonth(), startDay + i);\n    if (d > now) break;\n    const dateStr = d.toISOString(); // full ISO for consistency\n    const qty = Math.floor(Math.random() * 18) + 5;\n    for (let j = 0; j < qty; j++) {\n      const ncte = `CTE${Math.floor(Math.random() * 90000 + 10000)}`;\n      const ev = eventos[Math.floor(Math.random() * eventos.length)];\n      entregas.push({\n        OperadorMatricula: matricula,\n        OperadorNome: 'MOTORISTA DEMO',\n        NCTE: ncte,\n        QPacotes: Math.floor(Math.random() * 5) + 1,\n        Peso: (Math.random() * 30 + 1).toFixed(2),\n        Evento: ev,\n        Data: dateStr,\n        Hora: '10:00',\n        TaxaEntrega: (Math.random() * 15 + 3).toFixed(2),\n        TaxaInterior: '0',\n        valor_xpt: (Math.random() * 8 + 3).toFixed(2),\n        Expedidor: 'EXPEDIDOR TESTE',\n        Lista: 'L001',\n        CidadeDestino: 'SALVADOR',\n        BairroDestino: 'CENTRO',\n        Modalidade: 'NORMAL',\n      });\n      if (Math.random() < 0.05) reclamacaoCtes.push({ ctes: ncte });\n    }\n  }\n\n  return {\n    motorista: {\n      OperadorMatricula: matricula,\n      nome_completo: 'MOTORISTA DEMONSTRAÇÃO',\n      cpf: '00000000000',\n      valor_xpt: '1200.00',\n      pgro: 'A',\n      nom_tab: 'TABELA PADRÃO',\n      telefone: '71999999999',\n    },\n    entregas,\n    reclamacoes: reclamacaoCtes,\n  };\n}\n\n// ────────────────────────────────────────────────\n// ESTADO DE NAVEGAÇÃO DE QUINZENAS\n// ────────────────────────────────────────────────\nvar _quinzenasDisponiveis = [];\nvar _quinzenaIdx = 0; // 0 = mais recente\n\nfunction renderDashboard(data) {\n  const { motorista, entregas, reclamacoes, frete, listas } = data;\n\n  // Calcula todas as quinzenas disponíveis\n  _quinzenasDisponiveis = getAllQuinzenas(entregas, 'Data');\n  _quinzenaIdx = 0;\n\n  // Exibe UI\n  $('login-screen').style.display = 'none';\n  $('dashboard').style.display = 'block';\n  $('main-loading').style.display = 'none';\n  $('main-content').style.display = 'block';\n\n  // Nome: prioriza campo do cadastro, fallback para OperadorNome das entregas\n  const nomeMotorista = (motorista && motorista.nome_completo)\n    ? motorista.nome_completo\n    : (entregas && entregas.length ? entregas[0].OperadorNome : 'MOTORISTA');\n  const matriculaMotorista = (motorista && motorista.OperadorMatricula)\n    ? motorista.OperadorMatricula\n    : (entregas && entregas.length ? entregas[0].OperadorMatricula : '—');\n  const nomTab = (motorista && motorista.nom_tab) ? motorista.nom_tab : '';\n\n  // Topbar\n  $('tb-nome').textContent = nomeMotorista.toUpperCase();\n  $('tb-mat').textContent  = matriculaMotorista;\n\n  // Hero\n  const primeiroNome = nomeMotorista.split(' ').slice(0, 2).join(' ').toUpperCase();\n  $('hero-nome').textContent = primeiroNome;\n  $('hero-mat').textContent  = `MAT. ${matriculaMotorista}${nomTab ? ' · ' + nomTab : ''}`;\n\n  // Configura botões de navegação\n  $('btn-qz-prev').onclick = function() {\n    if (_quinzenaIdx < _quinzenasDisponiveis.length - 1) {\n      _quinzenaIdx++;\n      renderQuinzena(currentDriver.entregas, currentDriver.reclamacoes, currentDriver.frete || [], currentDriver.listas || []);\n    }\n  };\n  $('btn-qz-next').onclick = function() {\n    if (_quinzenaIdx > 0) {\n      _quinzenaIdx--;\n      renderQuinzena(currentDriver.entregas, currentDriver.reclamacoes, currentDriver.frete || [], currentDriver.listas || []);\n    }\n  };\n\n  renderQuinzena(entregas, reclamacoes, frete || [], listas || []);\n}\n\nfunction renderQuinzena(entregas, reclamacoes, frete, listas) {\n  if (!_quinzenasDisponiveis.length) {\n    $('quinzena-label').textContent = 'SEM DADOS';\n    $('pagamento-label').style.display = 'none';\n    $('btn-qz-prev').style.opacity = '0.3';\n    $('btn-qz-next').style.opacity = '0.3';\n    return;\n  }\n\n  const qz = _quinzenasDisponiveis[_quinzenaIdx];\n  const { rows: entregasQ, label: qLabel } = filterQuinzena(entregas, 'Data', qz);\n  const isLatest = _quinzenaIdx === 0;\n  const isOldest = _quinzenaIdx === _quinzenasDisponiveis.length - 1;\n\n  // Botões nav\n  $('btn-qz-prev').style.opacity = isOldest ? '0.3' : '1';\n  $('btn-qz-prev').style.cursor  = isOldest ? 'default' : 'pointer';\n  $('btn-qz-next').style.opacity = isLatest ? '0.3' : '1';\n  $('btn-qz-next').style.cursor  = isLatest ? 'default' : 'pointer';\n\n  // Label com indicador\n  const totalQz = _quinzenasDisponiveis.length;\n  const posLabel = totalQz > 1 ? ` (${_quinzenaIdx + 1}/${totalQz})` : '';\n  $('quinzena-label').textContent = qLabel + posLabel;\n\n  // Pagamento previsto — 5 dias úteis após fim da quinzena\n  const pagamentoDate = calcPagamento(qz.end);\n  const pagamentoFmt  = pagamentoDate.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });\n  $('pagamento-data').textContent = pagamentoFmt;\n  $('pagamento-label').style.display = 'block';\n\n  // Animação do badge ao trocar quinzena\n  const badge = $('quinzena-label');\n  badge.style.transition = 'opacity .15s';\n  badge.style.opacity = '0';\n  setTimeout(function() { badge.style.opacity = '1'; }, 150);\n\n  // Separa por evento\n  const soEntregas = entregasQ.filter(r => isEntregaEfetiva(r.Evento));\n  const insucessos = entregasQ.filter(r => isInsucesso(r.Evento));\n\n  // KPIs\n  $('kpi-ctes').textContent = soEntregas.length;\n\n  const diasSet = new Set(soEntregas.map(r => toDateKey(r.Data)));\n  $('kpi-dias').textContent = diasSet.size;\n\n  $('kpi-insucessos').textContent = insucessos.length;\n  const insPct = entregasQ.length ? ((insucessos.length / entregasQ.length) * 100).toFixed(1) : '0.0';\n  $('kpi-ins-pct').textContent = `${insPct}% dos eventos`;\n\n  // Reclamações\n  const ctesDaQuinzena = new Set(entregasQ.map(r => String(r.NCTE)));\n  const reclamacoesQ   = (reclamacoes || []).filter(r => ctesDaQuinzena.has(String(r.ctes)));\n  $('kpi-reclam').textContent = reclamacoesQ.length;\n  const recPct = soEntregas.length ? ((reclamacoesQ.length / soEntregas.length) * 100).toFixed(2) : '0.00';\n  $('kpi-rec-pct').textContent = `${recPct}% das entregas`;\n\n  // KPI total a receber — soma o valor de cada CTE pela sua métrica de lista\n  const totalReceber = soEntregas.reduce(function(acc, r) {\n    return acc + calcValorCte(r, frete, listas).valor;\n  }, 0);\n  const kpiTotal = $('kpi-total');\n  if (kpiTotal) kpiTotal.textContent = formatMoney(totalReceber);\n\n  // Mostra a métrica predominante\n  const metricasPred = {};\n  soEntregas.forEach(function(r) {\n    const m = calcValorCte(r, frete, listas).metrica;\n    metricasPred[m] = (metricasPred[m] || 0) + 1;\n  });\n  const metricaDominante = Object.entries(metricasPred).sort((a,b)=>b[1]-a[1])[0];\n  const kpiXpt = $('kpi-xpt-unit');\n  if (kpiXpt) kpiXpt.textContent = metricaDominante ? metricaDominante[0] : '—';\n\n  // 1. Pega os números de listas únicas que o motorista trabalhou na quinzena\n  //    usando RELATORIOENTREGA_EXPORT (entregasQ já está filtrada por matrícula e quinzena)\n  const listasDoMotorista = new Set(\n    entregasQ\n      .map(function(e) { return String(e.Lista || '').trim(); })\n      .filter(function(l) { return l && l !== 'null'; })\n  );\n\n  // 2. Cruza com lista_entregas (Número) e filtra pela Data Baixa dentro da quinzena\n  const listasQ = (listas || []).filter(function(l) {\n    const numero = String(l['Número'] || '').trim();\n\n    // Deve estar entre as listas trabalhadas pelo motorista\n    if (!listasDoMotorista.has(numero)) return false;\n\n    // Filtra pela Data Baixa dentro da quinzena (qz já declarada acima)\n    const dBaixa = toDateKey(l['Data Baixa'] || '');\n    if (!dBaixa || !qz) return false;\n    const d = new Date(dBaixa);\n    return d >= qz.start && d <= qz.end;\n  });\n\n  // Render seções\n  renderProdutividade(soEntregas, frete, listas);\n  renderEficiencia(entregasQ, soEntregas, insucessos);\n  renderReclamacoes(reclamacoesQ, soEntregas.length);\n  renderListas(listasQ, frete || [], soEntregas);\n}\n\nfunction isInsucesso(evento) {\n  const ev = String(evento || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n  return EVENTOS_INSUCESSO.some(ie => {\n    const norm = ie.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n    return ev.includes(norm);\n  });\n}\n\nfunction isEntregaEfetiva(evento) {\n  const ev = String(evento || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n  return ev === 'entrega' || ev.trim() === 'entrega';\n}\n\n// ─── HELPER: calcula valor de uma CTE pela métrica da lista ──────────────\nfunction calcValorCte(cte, freteRows, listasRows) {\n  // Busca a lista da CTE pelo campo Lista\n  const numLista = cte.Lista;\n  let lista = null;\n  if (numLista && listasRows && listasRows.length) {\n    lista = listasRows.find(function(l) {\n      return String(l['Número']) === String(numLista);\n    });\n  }\n\n  // Métrica: da lista se existir, senão do cadastro do motorista\n  const metrica = (lista && lista.metrica_da_lista)\n    ? lista.metrica_da_lista\n    : (currentDriver && currentDriver.motorista && currentDriver.motorista.pgro)\n      ? currentDriver.motorista.pgro\n      : null;\n\n  // Busca valor_frete correspondente à métrica\n  let valorFrete = 0;\n  if (metrica && freteRows && freteRows.length) {\n    const freteRow = freteRows.find(function(f) {\n      return f.metrica && f.metrica.toLowerCase().trim() === metrica.toLowerCase().trim();\n    });\n    if (freteRow) valorFrete = parseFloat(freteRow.valor_frete) || 0;\n  }\n\n  // Fallback: valor_xpt do cadastro\n  if (!valorFrete) {\n    valorFrete = parseValorXpt(\n      (cte.valor_xpt) ? cte.valor_xpt\n      : (currentDriver && currentDriver.motorista) ? currentDriver.motorista.valor_xpt : 0\n    );\n  }\n\n  return { valor: valorFrete, metrica: metrica || '—' };\n}\n\n// ─── PRODUTIVIDADE ───────────────────────────────\nfunction renderProdutividade(rows, freteRows, listasRows) {\n  // Agrupa por data usando valor calculado pela métrica da lista\n  const byDate = {};\n  rows.forEach(r => {\n    const d = toDateKey(r.Data);\n    if (!byDate[d]) byDate[d] = { ctes: 0, pacotes: 0, peso: 0, taxa: 0 };\n    byDate[d].ctes++;\n    byDate[d].pacotes += parseInt(r.QPacotes) || 0;\n    byDate[d].peso    += parseFloat(r.Peso) || 0;\n    const calc = calcValorCte(r, freteRows, listasRows);\n    byDate[d].taxa += calc.valor;\n  });\n\n  const dates = Object.keys(byDate).sort();\n  const maxCtes = Math.max(...dates.map(d => byDate[d].ctes), 1);\n\n  // Bars\n  const barsEl = $('prod-bars');\n  barsEl.innerHTML = '';\n  dates.forEach(d => {\n    const pct = (byDate[d].ctes / maxCtes * 100).toFixed(1);\n    const row = document.createElement('div');\n    row.className = 'bar-row';\n    row.innerHTML = `\n      <div class=\"bar-label\">${formatDate(d)}</div>\n      <div class=\"bar-track\">\n        <div class=\"bar-fill accent\" style=\"width:0%\" data-target=\"${pct}%\"></div>\n      </div>\n      <div class=\"bar-val\">${byDate[d].ctes}</div>\n    `;\n    barsEl.appendChild(row);\n  });\n\n  // Table\n  const tbody = $('prod-tbody');\n  tbody.innerHTML = '';\n  if (!dates.length) {\n    tbody.innerHTML = '<tr><td colspan=\"5\" style=\"text-align:center;color:var(--muted)\">Nenhum registro encontrado.</td></tr>';\n  } else {\n    dates.forEach(d => {\n      const tr = document.createElement('tr');\n      tr.innerHTML = `\n        <td>${formatDate(d)}</td>\n        <td><span class=\"badge badge-green\">${byDate[d].ctes}</span></td>\n        <td>${byDate[d].pacotes}</td>\n        <td>${byDate[d].peso.toFixed(1)}</td>\n        <td>${formatMoney(byDate[d].taxa)}</td>\n      `;\n      tbody.appendChild(tr);\n    });\n  }\n\n  // Animação das barras\n  requestAnimationFrame(() => {\n    document.querySelectorAll('.bar-fill[data-target]').forEach(el => {\n      setTimeout(() => { el.style.width = el.dataset.target; }, 100);\n    });\n  });\n}\n\n// ─── EFICIÊNCIA ──────────────────────────────────\nfunction renderEficiencia(all, entregas, insucessos) {\n  const total = all.length;\n  const nEnt  = entregas.length;\n  const nIns  = insucessos.length;\n  const pct   = total > 0 ? Math.round((nEnt / total) * 100) : 0;\n\n  $('ef-total').textContent    = total;\n  $('ef-entrega').textContent  = nEnt;\n  $('ef-insucesso').textContent = nIns;\n\n  // Gauge\n  const arc = $('gauge-arc');\n  const circumference = 314;\n  const offset = circumference - (pct / 100) * circumference;\n\n  const pctEl = $('gauge-pct');\n  pctEl.textContent = `${pct}%`;\n  pctEl.className = 'gauge-pct';\n  if (pct < 70)      { pctEl.classList.add('danger'); arc.style.stroke = 'var(--danger)'; }\n  else if (pct < 85) { pctEl.classList.add('warn');   arc.style.stroke = 'var(--warn)'; }\n  else               { arc.style.stroke = 'var(--accent2)'; }\n\n  setTimeout(() => { arc.style.strokeDashoffset = offset; }, 200);\n\n  // Contagem por tipo de evento\n  const byEvento = {};\n  all.forEach(r => {\n    const ev = String(r.Evento || 'INDEFINIDO').toUpperCase();\n    byEvento[ev] = (byEvento[ev] || 0) + 1;\n  });\n\n  const tbody = $('ef-tbody');\n  tbody.innerHTML = '';\n  Object.entries(byEvento).sort((a,b) => b[1]-a[1]).forEach(([ev, qty]) => {\n    const p = total > 0 ? ((qty/total)*100).toFixed(1) : '0.0';\n    const isIns = isInsucesso(ev);\n    const tr = document.createElement('tr');\n    tr.innerHTML = `\n      <td>${ev} ${isIns ? '<span class=\"badge badge-warn\">INSUCESSO</span>' : ''}</td>\n      <td>${qty}</td>\n      <td>${p}%</td>\n    `;\n    tbody.appendChild(tr);\n  });\n\n  if (!Object.keys(byEvento).length) {\n    tbody.innerHTML = '<tr><td colspan=\"3\" style=\"text-align:center;color:var(--muted)\">Sem dados.</td></tr>';\n  }\n}\n\n// ─── LISTAS / VIAGENS ────────────────────────────\nfunction renderListas(listasQ, freteRows, entregasQ) {\n  const el = $('listas-content');\n  if (!el) return;\n\n  if (!listasQ || !listasQ.length) {\n    el.innerHTML = '<div class=\"empty\">Nenhuma lista encontrada para esta quinzena.</div>';\n    return;\n  }\n\n  // Para cada lista, conta CTes entregues e calcula valor\n  const html = [];\n\n  // Resumo de métricas no topo\n  const metricasUsadas = {};\n  listasQ.forEach(function(l) {\n    const m = l.metrica_da_lista || '—';\n    if (!metricasUsadas[m]) {\n      const freteRow = freteRows.find(function(f) {\n        return f.metrica && f.metrica.toLowerCase().trim() === (m).toLowerCase().trim();\n      });\n      metricasUsadas[m] = freteRow ? parseFloat(freteRow.valor_frete) || 0 : 0;\n    }\n  });\n\n  const resumoItems = Object.entries(metricasUsadas).map(function(entry) {\n    const m = entry[0], v = entry[1];\n    return '<div class=\"metrica-resumo-item\">'\n      + '<span class=\"metrica-resumo-lbl\">Métrica</span>'\n      + '<span class=\"metrica-resumo-val\">' + m + (v > 0 ? ' · ' + formatMoney(v) + '/entrega' : '') + '</span>'\n      + '</div>';\n  }).join('<div style=\"width:1px;background:var(--border);align-self:stretch;\"></div>');\n\n  html.push('<div class=\"metrica-resumo\">' + resumoItems + '</div>');\n  html.push('<div class=\"listas-grid\">');\n\n  var totalListas = 0;\n\n  listasQ.forEach(function(lista) {\n    const numLista = String(lista['Número'] || '');\n    const metrica  = lista.metrica_da_lista || null;\n    const status   = lista.status || '—';\n    const rota     = lista.Rota || '—';\n    const qtd      = lista.Qtd || 0;\n    const peso     = parseFloat(lista.Peso) || 0;\n    const pago     = lista.pago;\n\n    // Conta CTes entregues desta lista\n    const ctesLista = entregasQ.filter(function(e) {\n      return String(e.Lista) === numLista && isEntregaEfetiva(e.Evento);\n    });\n    const ctesEntregues = ctesLista.length;\n\n    // Calcula valor pela métrica\n    let valorFrete = 0;\n    let metricaLabel = '—';\n    if (metrica && freteRows.length) {\n      const freteRow = freteRows.find(function(f) {\n        return f.metrica && f.metrica.toLowerCase().trim() === metrica.toLowerCase().trim();\n      });\n      if (freteRow) valorFrete = parseFloat(freteRow.valor_frete) || 0;\n      metricaLabel = metrica;\n    } else if (!metrica) {\n      // Sem métrica definida: usa fallback do cadastro\n      valorFrete = parseValorXpt(\n        currentDriver && currentDriver.motorista ? currentDriver.motorista.valor_xpt : 0\n      );\n      metricaLabel = (currentDriver && currentDriver.motorista && currentDriver.motorista.pgro) || '—';\n    }\n    const valorTotal = valorFrete * ctesEntregues;\n    totalListas += valorTotal;\n\n    const metricaBadgeClass = metrica ? 'lista-metrica-badge' : 'lista-metrica-badge sem-metrica';\n    const pagoBadge = pago\n      ? '<span class=\"badge badge-green\" style=\"font-size:.55rem;\">PAGO</span>'\n      : '<span class=\"badge\" style=\"font-size:.55rem;background:rgba(255,159,64,.12);color:var(--warn);border:1px solid rgba(255,159,64,.2);\">PENDENTE</span>';\n    const statusColor = status === 'Finalizado' ? 'var(--accent2)' : 'var(--warn)';\n\n    html.push(\n      '<div class=\"lista-card\">'\n      + '<div class=\"lista-card-header\">'\n      +   '<div>'\n      +     '<div class=\"lista-numero\">#' + numLista + '</div>'\n      +     '<div class=\"lista-rota\">' + rota + '</div>'\n      +   '</div>'\n      +   '<div style=\"display:flex;flex-direction:column;align-items:flex-end;gap:4px;\">'\n      +     '<span class=\"' + metricaBadgeClass + '\">' + metricaLabel + '</span>'\n      +     pagoBadge\n      +   '</div>'\n      + '</div>'\n      + '<div class=\"lista-stats\">'\n      +   '<div class=\"lista-stat\"><div class=\"lista-stat-val\">' + ctesEntregues + '</div><div class=\"lista-stat-lbl\">Entregues</div></div>'\n      +   '<div class=\"lista-stat\"><div class=\"lista-stat-val\">' + qtd + '</div><div class=\"lista-stat-lbl\">Na Lista</div></div>'\n      +   '<div class=\"lista-stat\"><div class=\"lista-stat-val\">' + peso.toFixed(0) + 'kg</div><div class=\"lista-stat-lbl\">Peso</div></div>'\n      + '</div>'\n      + '<div class=\"lista-valor\">'\n      +   '<div>'\n      +     '<div class=\"lista-valor-lbl\">Valor Calculado</div>'\n      +     '<div style=\"font-family:var(--font-mono);font-size:.6rem;color:var(--muted);\">'\n      +       (valorFrete > 0 ? formatMoney(valorFrete) + ' × ' + ctesEntregues + ' entregas' : 'métrica não definida')\n      +     '</div>'\n      +   '</div>'\n      +   '<div class=\"lista-valor-num' + (valorTotal === 0 ? ' sem-valor' : '') + '\">'\n      +     (valorTotal > 0 ? formatMoney(valorTotal) : '—')\n      +   '</div>'\n      + '</div>'\n      + '</div>'\n    );\n  });\n\n  html.push('</div>');\n\n  // Rodapé com total\n  html.push(\n    '<div style=\"margin-top:16px;padding:14px 18px;background:var(--surface2);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;\">'\n    + '<div style=\"font-family:var(--font-mono);font-size:.65rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;\">Total das Listas na Quinzena</div>'\n    + '<div style=\"font-family:var(--font-display);font-size:1.5rem;color:var(--accent2);letter-spacing:2px;\">' + formatMoney(totalListas) + '</div>'\n    + '</div>'\n  );\n\n  el.innerHTML = html.join('');\n}\n\n// ─── RECLAMAÇÕES ─────────────────────────────────\nfunction renderReclamacoes(reclamacoesQ, totalEntregas) {\n  const el = $('rec-content');\n\n  if (!reclamacoesQ.length) {\n    el.innerHTML = '<div style=\"text-align:center;padding:32px 0;\">'\n      + '<div style=\"font-family:var(--font-display);font-size:2.5rem;color:var(--accent2);\">\\u2713 ZERO</div>'\n      + '<div style=\"font-family:var(--font-mono);font-size:.7rem;color:var(--muted);margin-top:8px;letter-spacing:2px;\">NENHUMA RECLAMAÇÃO NA QUINZENA</div>'\n      + '</div>';\n    return;\n  }\n\n  var indice = totalEntregas > 0 ? ((reclamacoesQ.length / totalEntregas) * 100).toFixed(2) : '0.00';\n\n  var rows = reclamacoesQ.map(function(r, i) {\n    var badge = r.resolvida\n      ? '<span class=\"badge badge-green\">RESOLVIDA</span>'\n      : '<span class=\"badge badge-red\">PENDENTE</span>';\n    var dataRec = r.criado_em ? formatDate(r.criado_em) : '\\u2014';\n    var assunto = r.assunto || 'Reclamação';\n    return '<tr>'\n      + '<td style=\"color:var(--muted)\">' + (i + 1) + '</td>'\n      + '<td style=\"font-size:.7rem\">' + r.ctes + '</td>'\n      + '<td>' + assunto + '</td>'\n      + '<td>' + badge + '</td>'\n      + '<td>' + dataRec + '</td>'\n      + '</tr>';\n  }).join('');\n\n  el.innerHTML = '<div style=\"display:flex;align-items:baseline;gap:12px;margin-bottom:20px;\">'\n    + '<div style=\"font-family:var(--font-display);font-size:3rem;color:var(--danger);\">' + reclamacoesQ.length + '</div>'\n    + '<div>'\n    + '<div style=\"font-family:var(--font-mono);font-size:.65rem;color:var(--muted);\">ÍNDICE DE RECLAMAÇÕES</div>'\n    + '<div style=\"font-family:var(--font-display);font-size:1.2rem;color:var(--warn);\">' + indice + '%</div>'\n    + '</div></div>'\n    + '<table class=\"data-table\">'\n    + '<thead><tr><th>#</th><th>CTe</th><th>Assunto</th><th>Status</th><th>Data</th></tr></thead>'\n    + '<tbody>' + rows + '</tbody>'\n    + '</table>';\n}\n\n// ────────────────────────────────────────────────\n// EVENTOS\n// ────────────────────────────────────────────────\n$('btn-entrar').addEventListener('click', handleLogin);\n\n$('inp-cpf').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });\n$('inp-matricula').addEventListener('keydown', e => { if (e.key === 'Enter') $('inp-cpf').focus(); });\n\n$('btn-logout').addEventListener('click', () => {\n  currentDriver = null;\n  $('login-screen').style.display = 'flex';\n  $('dashboard').style.display = 'none';\n  $('inp-matricula').value = '';\n  $('inp-cpf').value = '';\n  $('login-error').style.display = 'none';\n  $('main-loading').style.display = 'flex';\n  $('main-content').style.display = 'none';\n});\n\n// Máscara simples no CPF\n$('inp-cpf').addEventListener('input', e => {\n  e.target.value = e.target.value.replace(/\\D/g, '').slice(0, 11);\n});\n</script>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -2672,
+        128
+      ],
+      "id": "b5ba832f-7f6a-449f-8669-01ca2f2f32d9",
+      "name": "HTML4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "AcaoLista",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        672
+      ],
+      "id": "1001859f-8fac-4796-8927-d3cd19c688b6",
+      "name": "AcaoLista",
+      "webhookId": "78c0ebb3-28bf-4ad8-9e4c-a52c1ef9ecdb"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "revisao_motorista",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2896,
+        1408
+      ],
+      "id": "e1ddd157-d52a-46af-8376-76639864d71a",
+      "name": "revisao_motorista",
+      "webhookId": "78c0ebb3-28bf-4ad8-9e4c-a52c1ef9ecdb"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ok_motorista": true,
+            "Número": "={{ $json['Número'] }}",
+            "matricula_motorista": "={{ $json.matricula_motorista }}"
+          },
+          "matchingColumns": [
+            "Número",
+            "matricula_motorista"
+          ],
+          "schema": [
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qtd",
+              "displayName": "Qtd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Peso",
+              "displayName": "Peso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Emissão",
+              "displayName": "Data Emissão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Baixa",
+              "displayName": "Data Baixa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rota",
+              "displayName": "Rota",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pago",
+              "displayName": "pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "metrica_da_lista",
+              "displayName": "metrica_da_lista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "matricula_motorista",
+              "displayName": "matricula_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "obs",
+              "displayName": "obs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "revisado",
+              "displayName": "revisado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ok_motorista",
+              "displayName": "ok_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "revisao_motorista",
+              "displayName": "revisao_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2224,
+        576
+      ],
+      "id": "3042cc7d-e2d2-409f-aac2-e6e256296c76",
+      "name": "Update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "Número",
+              "value": "={{ $json.body.numero.toNumber() }}"
+            },
+            {
+              "column": "matricula_motorista",
+              "value": "={{ $json.body.matricula_motorista.toString() }}"
+            },
+            {
+              "column": "ok_motorista",
+              "value": "={{ false }}"
+            },
+            {
+              "column": "revisado",
+              "value": "={{true}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2448,
+        576
+      ],
+      "id": "34d1954f-b9ed-4c81-833e-40099b5846c2",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "Número",
+              "value": "={{ $json.body.numero.toNumber() }}"
+            },
+            {
+              "column": "matricula_motorista",
+              "value": "={{ $json.body.matricula_motorista.toString() }}"
+            },
+            {
+              "column": "ok_motorista",
+              "value": "={{ false }}"
+            },
+            {
+              "column": "revisado",
+              "value": "={{true}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2672,
+        1408
+      ],
+      "id": "182e1332-3e3f-4e58-9dbb-61bf47f6b655",
+      "name": "Select rows from a table1",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "ok_motorista",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5fd9462c-c7ae-4a13-a2bb-7dcc7564749c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok_motorista"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8467c512-db4b-426d-80bb-b50c345d54e3",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "revisao_motorista",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "revisao_motorista"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2672,
+        672
+      ],
+      "id": "c932ee68-4bd5-4d5d-bb69-19c1696b5426",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Número": "={{ $json['Número'] }}",
+            "revisao_motorista": true,
+            "matricula_motorista": "={{ $json.matricula_motorista }}"
+          },
+          "matchingColumns": [
+            "Número",
+            "matricula_motorista"
+          ],
+          "schema": [
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qtd",
+              "displayName": "Qtd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Peso",
+              "displayName": "Peso",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Valor",
+              "displayName": "Valor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Emissão",
+              "displayName": "Data Emissão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data Baixa",
+              "displayName": "Data Baixa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rota",
+              "displayName": "Rota",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pago",
+              "displayName": "pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "metrica_da_lista",
+              "displayName": "metrica_da_lista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "matricula_motorista",
+              "displayName": "matricula_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "obs",
+              "displayName": "obs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "revisado",
+              "displayName": "revisado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ok_motorista",
+              "displayName": "ok_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "revisao_motorista",
+              "displayName": "revisao_motorista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2224,
+        768
+      ],
+      "id": "a68db1d3-2a86-422b-a933-287018308e99",
+      "name": "Update rows in a table1",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lista_entregas",
+          "mode": "list",
+          "cachedResultName": "lista_entregas"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "Número",
+              "value": "={{ $json.body.numero.toNumber() }}"
+            },
+            {
+              "column": "matricula_motorista",
+              "value": "={{ $json.body.matricula_motorista.toString() }}"
+            },
+            {
+              "column": "revisao_motorista",
+              "value": "={{ false }}"
+            },
+            {
+              "column": "revisado",
+              "value": "={{true}}"
+            },
+            {
+              "column": "ok_motorista",
+              "value": "={{false}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2448,
+        768
+      ],
+      "id": "32649aff-7b62-4399-8e87-9bc8f484f7fc",
+      "name": "Select rows from a table2",
+      "credentials": {
+        "postgres": {
+          "id": "vIu78ExABVR8spO3",
+          "name": "Postgres JadLog"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseHeaders": {
+            "entries": []
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2224,
+        -480
+      ],
+      "id": "f6970e14-3aac-4ada-8d65-e3630df28869",
+      "name": "Respond to Webhook5"
+    }
+  ],
+  "pinData": {
+    "Webhook5": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "cache-control": "max-age=0",
+            "cookie": "intercom-device-id-y10e7138=61f52aba-3b09-4e41-9783-2e7e06acb899; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2FKdiNFWBIvqEwOKtTPDIcybOYAoNAp6h8%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2BY3eU%2FZf2NrA%2BNiJ42FfMsTuqQrJIuya0%3D; intercom-session-y10e7138=NGh3NTBTVnB4TXBSOW9nZTB1N2ZndWRMWUJ6bG9tU2FXOFY5cVBKczRpQnRMMldSTUFyRWp5bEVuTzFFaDBudEtmNktmTk1STDVMbkg4K1BtN2hNYmIzQ2xHSDF0K2ZRTWhUWDA1ZXN6Y2NPM0hnMGxOd1RRVndKWFM4TU00Tk9jdmRpNXkydUhaci9MMkx5dmppenV1QzNveWdnYzhmZys3aEVBRzJvY3dVUVdGeDdyMGFVT2pqdThJT0EyTVR2Nm9mZnFsd3Y4Y29sUG1OK1lmVkt2UTM0endMenBGazRjaEQ1SFFiRmN5MD0tLTJ5OVVWMWZ6cksxWDZ6bCtPeEFBNHc9PQ==--7ca6806aab440f72241a727a7d7b991814066ee5; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX1%2FQCMJdPghBmejuDPdYjVt39kKB2k4wUN96hPb69g%2BOn2Bq0xiWHuLWcQJqyagSiw1SRttYIGhLrA%3D%3D; rl_session=RudderEncrypt%3AU2FsdGVkX18%2FTdyaLuzXXwnnHPab%2By1%2B0nxX57d91XmnFSShtmdgpmovNkyFdlBaKDhPaO6icKfHKo%2FQZ1qi7bwe718vQqT3Tx1WUo%2Fjr%2Fla6PeqHdAMe2yx6NUb0l44Sc9pfpUO6UQJMECQ%2BK1UDw%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22%24device_id%22%3A%22019cdcd3-fa49-7ca1-8a4f-e4c9b41eb291%22%2C%22distinct_id%22%3A%22e1f2216d7347cf769726185925ae07114c4973b80c7c25593f572a165e156a73%23ec9a9d9a-b5bd-4291-ba10-a11aa055677b%22%2C%22%24sesid%22%3A%5B1774192035602%2C%22019d15b3-4e4c-7886-bc0f-41429ca28ce5%22%2C1774185565772%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22%24direct%22%2C%22u%22%3A%22https%3A%2F%2Fauto.sactudo.com.br%2Fsignin%3Fredirect%3D%25252Fworkflow%25252FA0wYxzT4z9XOXFF0%22%7D%2C%22%24user_state%22%3A%22identified%22%7D",
+            "if-none-match": "W/\"83fd-UqfYX8ykQfYtYR6XPrC5fLUh5Og\"",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Microsoft Edge\";v=\"145\", \"Chromium\";v=\"145\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "186.243.19.72",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "17e049ef009b",
+            "x-real-ip": "186.243.19.72"
+          },
+          "params": {},
+          "query": {},
+          "body": {},
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/relatorio-motorista",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "SalvarViagem": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+            "content-length": "244",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "content-type": "application/json",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Microsoft Edge\";v=\"145\", \"Chromium\";v=\"145\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "186.243.19.72",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "17e049ef009b",
+            "x-real-ip": "186.243.19.72"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "action": "nova_viagem",
+            "Número": 3333,
+            "Data Emissão": "2026-03-23",
+            "matricula_motorista": 127704,
+            "Rota": "ALESSANDRO MELO DE OLIVEIRA",
+            "status": "Aberto",
+            "revisado": false,
+            "pago": false,
+            "Qtd": 0,
+            "Peso": 0,
+            "Valor": 0,
+            "metrica_da_lista": null,
+            "obs": null
+          },
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/SalvarViagem",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "RevisarViagem1": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+            "content-length": "128",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "content-type": "application/json",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Microsoft Edge\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "200.170.77.209",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "6d30ab46774f",
+            "x-real-ip": "200.170.77.209"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "action": "revisar_viagem",
+            "numero": 2528,
+            "revisado": true,
+            "matricula_motorista": 130354,
+            "metrica_da_lista": "Por Entrega",
+            "obs": ""
+          },
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/RevisarViagem",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook4": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Microsoft Edge\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "45.166.154.68",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "68b49494b1ea",
+            "x-real-ip": "45.166.154.68"
+          },
+          "params": {},
+          "query": {},
+          "body": {},
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/Viagens",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "AcaoLista": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+            "content-length": "90",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "content-type": "application/json",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Microsoft Edge\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "45.166.154.68",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "68b49494b1ea",
+            "x-real-ip": "45.166.154.68"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "action": "ok_motorista",
+            "numero": "2495",
+            "matricula_motorista": 127487,
+            "ok_motorista": true
+          },
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/AcaoLista",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "cache-control": "max-age=0",
+            "cookie": "rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX19O3jTZR5WALPh653bLfcURJIvHqODz5CQ%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2FFY3xyR0h3t%2FdBn6QXA1HwH3kCCPMlGGA%3D; intercom-device-id-y10e7138=77cb498d-b346-4fb7-968d-4688225e4a5e; intercom-session-y10e7138=a01DVjVhclk3WENlaGxremNSaUp5UEdZcFl2T0VLM0ozWGlnUHBsOFVlWFpzN1FRQ251bUF3NGlxekI4VkhqaS9UcmlDUWNMRDc1Vmg3RVRxZEJvdkpzTHNFTFR0NjRSU0QyV0JRQW16RXdzK1RNUG9nK0F1cDk3ZUZLRjU0eFlMZktCRS9sVlRBMmNsc3RrSGhYdlorU1BEWmxaeUdJdXJkSnNadkJDejNUVlU2bW54dTFhbzFSTlNNSi9FTitCa3lqNmFkWlAvdFZuMkhZUDlkRjR6MTVwR2RKWDJMbmdJUXVUMmhZZGJHOD0tLUpoK3c1NmJkR0dqMWwyempEa2hsTXc9PQ==--16867d3402a591325665bb6f734bcb215eab0805; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX19JeqZ6qNtui6g7kGWMoDXd3hjg8AHoV8tmwpv8oml1zw%2FrBvydQRH81eb%2BbKIb%2FkkPJe4H0FYwFg%3D%3D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2BtbbQPZWDhD7UP3iXGq5iLcu4a02Ea1I%2Bft47YjLzPX%2FqI3Rg9Z6%2F4itRN7vH1XShurUd4EuNT7GqsTQPrUgizYpdOXw9%2BlRLsbWJZ7Y9jIoksH43hvtCuWKpKYrqPwsReHzXzntqnUw%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22%24device_id%22%3A%22019d1ff9-e113-7332-85e0-fa6c526e5e63%22%2C%22distinct_id%22%3A%22e1f2216d7347cf769726185925ae07114c4973b80c7c25593f572a165e156a73%23ec9a9d9a-b5bd-4291-ba10-a11aa055677b%22%2C%22%24sesid%22%3A%5B1774974344219%2C%22019d44b7-01a5-715f-9ed1-fbc5fdc3d455%22%2C1774974337445%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22%24direct%22%2C%22u%22%3A%22https%3A%2F%2Fauto.sactudo.com.br%2Fsignin%3Fredirect%3D%25252Fprojects%25252FPSIcm0ZADzMhYOYv%25252Fexecutions%22%7D%2C%22%24user_state%22%3A%22identified%22%7D",
+            "if-none-match": "W/\"fe09-LewWnlr7eFay2QAg2BuE6jKusW4\"",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Microsoft Edge\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "200.170.78.217",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "68b49494b1ea",
+            "x-real-ip": "200.170.78.217"
+          },
+          "params": {},
+          "query": {},
+          "body": {},
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/relatorio-motorista",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.sactudo.com.br",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0",
+            "content-length": "42",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,pl;q=0.5",
+            "content-type": "application/json",
+            "origin": "null",
+            "priority": "u=1, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Microsoft Edge\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "200.170.78.217",
+            "x-forwarded-host": "webhook.sactudo.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "68b49494b1ea",
+            "x-real-ip": "200.170.78.217"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "matricula": "127487",
+            "cpf": "01641987502"
+          },
+          "webhookUrl": "https://webhook.sactudo.com.br/webhook/Dados",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTML4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "motorista",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "reclamacoes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "entregas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "tabela_frete_motorista",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "lista_entregas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "motorista": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "reclamacoes": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "entregas": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tabela_frete_motorista": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "lista_entregas": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Webhook5": {
+      "main": [
+        [
+          {
+            "node": "HTML3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook4": {
+      "main": [
+        [
+          {
+            "node": "listar_viagens",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "listar_motoristas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "listar_viagens": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "listar_motoristas": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SalvarViagem": {
+      "main": [
+        [
+          {
+            "node": "listar_viagens2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RevisarViagem1": {
+      "main": [
+        [
+          {
+            "node": "listar_viagens3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AcaoLista": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "revisao_motorista": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table1": {
+      "main": [
+        []
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Select rows from a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table2": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f65b9d49-1864-4e9f-bb58-f7facda5b246",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1f2216d7347cf769726185925ae07114c4973b80c7c25593f572a165e156a73"
+  },
+  "nodeGroups": [],
+  "id": "vUyhU6ykNvKamSAC",
+  "tags": []
+}
